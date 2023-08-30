@@ -143,17 +143,17 @@ class Model
             return array();
         }
     }
-    // public function show_unique_whr($col="",$whr_assoc_arr, $ord='DESC',$limit = 9999999)
-    // {
-    //     $data = $this->dbTableObj->filter_distinct_whr($col,$whr_assoc_arr,$ord,$limit);
-    //     if (count($data)>0) {
-    //         return $data;
-    //     }
-    //     else{
-    //         return array();
-    //     }
-    // }
-    public function search($assoc_arr, $ord='DESC',$limit =10,$change_order_by_col="",$whr_arr=false)
+    public function show_unique_whr($col="",$whr_assoc_arr, $ord='DESC',$limit = 9999999)
+    {
+        $data = $this->dbTableObj->filter_distinct_whr($col,$whr_assoc_arr,$ord,$limit);
+        if (count($data)>0) {
+            return $data;
+        }
+        else{
+            return array();
+        }
+    }
+    public function search($assoc_arr, $ord='DESC',$limit =10,$change_order_by_col="",$whr_arr=array())
     {
         $data = $this->dbTableObj->search($assoc_arr,$ord,$limit,$change_order_by_col,$whr_arr);
         if (count($data)>0) {

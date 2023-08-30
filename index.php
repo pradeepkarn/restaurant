@@ -384,6 +384,16 @@ if ($url[0] == "restaurant-dashboard") {
   echo go_to('restaurant-login');
   return;
 }
+if ($url[0] == "restaurant-orders") {
+  if (authenticate()) {
+    if (USER['is_restaurant'] == 1) {
+      import("apps/view/pages/restaurant/order-list.php");
+      return;
+    }
+  }
+  echo go_to('restaurant-login');
+  return;
+}
 if ($url[0] == "restaurant-login-ajax") {
   $rstrnt = new Rest_ctrl;
   if ($rstrnt->login()) {

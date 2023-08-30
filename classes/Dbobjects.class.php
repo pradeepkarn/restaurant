@@ -208,6 +208,15 @@ class Dbobjects extends Dbh
         return $results;
            
     }
+    public function showOne($sql)
+    {
+     
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->execute();
+        $results = $stmt->fetch();
+        return $results;
+           
+    }
 	
 // read end
 

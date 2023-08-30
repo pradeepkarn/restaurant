@@ -17,28 +17,7 @@ import("apps/view/inc/navbar.php");
 
 <div class="wrapper">
     <!-- Sidebar  -->
-    <nav id="sidebar">
-
-
-        <ul class="list-unstyled components">
-            <li class="active">
-                <a href="#">My Restaurant</a>
-
-            </li>
-            <li>
-                <a href="#">Favourites</a>
-            </li>
-            <li>
-                <a href="#">Payments</a>
-            </li>
-            <li>
-                <a href="#">Addresses</a>
-            </li>
-            <li>
-                <a href="#">Settings</a>
-            </li>
-        </ul>
-    </nav>
+   <?php import("apps/view/pages/restaurant/inc.php"); ?>
 
     <!-- Page Content  -->
     <div id="content">
@@ -60,45 +39,45 @@ import("apps/view/inc/navbar.php");
                 </div>
             </div>
             <div class="row mt-4">
-                
-                <?php
-                        $userObj = new Model('restaurant_listing');
-                        $restaurant_list = $userObj->filter_index(array('is_listed' => true, 'user_id' => $_SESSION['user_id']));
-                        ?>
-                        <?php
-                        foreach ($restaurant_list as $rl) {
-                            $rl = (object) $rl;
-                            $pr = $rl->parent_id;
-                        ?>
-                        <div class="col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12 mb-3 mt-3">
-        <div class="rest">
-            <a href="/<?php echo home . "/create-menu/?rid=" . $rl->id; ?>">
-                <div class="dt">
-                    <img src="/<?php echo MEDIA_URL ?>/images/pages/<?php echo $rl->banner; ?>" class="w-100" alt="" srcset="">
-                </div>
-                <div class="newbox">
-                    <div class="lr">
-                        <h4><?php echo $rl->rest_name; ?></h4>
-                        <?php 
-                        $db = new Mydb('content');
-                        $prod = $db->pkData($pr);
-                        ?>
-                        <h6><?php echo $prod['title'] ?></h6>
-                    </div>
-                    <p><i class="bi bi-bicycle"> </i><?php echo $rl->priceforone; ?> | <?php echo $rl->food_time; ?></i></p>
-                </div>
-            </a>
-            </div>
-           
-        </div>
-                            <!-- <option selected value="<?php echo $rl->id; ?>"><?php echo $rl->rest_name; ?></option> -->
-                        <?php
-                        }
-                        ?>
-                        
-                </div>
 
-            
+                <?php
+                $userObj = new Model('restaurant_listing');
+                $restaurant_list = $userObj->filter_index(array('is_listed' => true, 'user_id' => $_SESSION['user_id']));
+                ?>
+                <?php
+                foreach ($restaurant_list as $rl) {
+                    $rl = (object) $rl;
+                    $pr = $rl->parent_id;
+                ?>
+                    <div class="col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12 mb-3 mt-3">
+                        <div class="rest">
+                            <a href="/<?php echo home . "/create-menu/?rid=" . $rl->id; ?>">
+                                <div class="dt">
+                                    <img src="/<?php echo MEDIA_URL ?>/images/pages/<?php echo $rl->banner; ?>" class="w-100" alt="" srcset="">
+                                </div>
+                                <div class="newbox">
+                                    <div class="lr">
+                                        <h4><?php echo $rl->rest_name; ?></h4>
+                                        <?php
+                                        $db = new Mydb('content');
+                                        $prod = $db->pkData($pr);
+                                        ?>
+                                        <h6><?php echo $prod['title'] ?></h6>
+                                    </div>
+                                    <p><i class="bi bi-bicycle"> </i><?php echo $rl->priceforone; ?> | <?php echo $rl->food_time; ?></i></p>
+                                </div>
+                            </a>
+                        </div>
+
+                    </div>
+                    <!-- <option selected value="<?php echo $rl->id; ?>"><?php echo $rl->rest_name; ?></option> -->
+                <?php
+                }
+                ?>
+
+            </div>
+
+
         </div>
     </div>
 </div>

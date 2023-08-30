@@ -23,36 +23,36 @@ import("apps/view/inc/navbar.php");
                     <h4 class="m-0">My Restaurants</h4>
                 </div>
                 <div class="row">
-                
-                <?php
-                        $userObj = new Model('restaurant_listing');
-                        $restaurant_list = $userObj->filter_index(array('is_listed' => true, 'user_id' => $_SESSION['user_id']));
-                        ?>
-                        <?php
-                        foreach ($restaurant_list as $rl) {
-                            $rl = (object) $rl;
-                        ?>
+
+                    <?php
+                    $userObj = new Model('restaurant_listing');
+                    $restaurant_list = $userObj->filter_index(array('is_listed' => true, 'user_id' => $_SESSION['user_id']));
+                    ?>
+                    <?php
+                    foreach ($restaurant_list as $rl) {
+                        $rl = (object) $rl;
+                    ?>
                         <div class="col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12 mb-3 mt-3">
-        <div class="rest">
-            <a href="/<?php echo home . "/create-menu/?rid=" . $rl->id; ?>">
-                <div class="dt">
-                    <img src="/<?php echo MEDIA_URL ?>/images/pages/<?php echo $rl->banner; ?>" class="w-100" alt="" srcset="">
-                </div>
-                <div class="newbox">
-                    <div class="lr">
-                        <h4><?php echo $rl->rest_name; ?></h4>
-                        <h6>Burgers</h6>
-                    </div>
-                    <p><i class="bi bi-bicycle"> </i><?php echo $rl->priceforone; ?> | <?php echo $rl->food_time; ?></i></p>
-                </div>
-            </a>
-            </div>
-           
-        </div>
-                            <!-- <option selected value="<?php echo $rl->id; ?>"><?php echo $rl->rest_name; ?></option> -->
-                        <?php
-                        }
-                        ?>
+                            <div class="rest">
+                                <a href="/<?php echo home . "/create-menu/?rid=" . $rl->id; ?>">
+                                    <div class="dt">
+                                        <img src="/<?php echo MEDIA_URL ?>/images/pages/<?php echo $rl->banner; ?>" class="w-100" alt="" srcset="">
+                                    </div>
+                                    <div class="newbox">
+                                        <div class="lr">
+                                            <h4><?php echo $rl->rest_name; ?></h4>
+                                            <h6>Burgers</h6>
+                                        </div>
+                                        <p><i class="bi bi-bicycle"> </i><?php echo $rl->priceforone; ?> | <?php echo $rl->food_time; ?></i></p>
+                                    </div>
+                                </a>
+                            </div>
+
+                        </div>
+                        <!-- <option selected value="<?php echo $rl->id; ?>"><?php echo $rl->rest_name; ?></option> -->
+                    <?php
+                    }
+                    ?>
                 </div>
             </div>
         </div>
