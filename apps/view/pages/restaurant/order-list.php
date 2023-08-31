@@ -10,6 +10,12 @@ import("apps/view/inc/navbar.php");
     table tr td {
         padding: 5px;
     }
+    .food-img{
+        border-radius: 5px;
+        width: 50px;
+        height: 50px;
+        object-fit: contain;
+    }
 </style>
 <div class="container-fluid checkout_banner mt-5">
     <div class="row">
@@ -42,26 +48,7 @@ import("apps/view/inc/navbar.php");
                 <div class="col-12">
                     <h4>My Orders</h4>
 
-                    <table class="table table-bordered table-success">
-                        <thead>
-                            <tr>
-                                <th>
-                                    Order Id
-                                </th>
-                                <th>
-                                    Order By
-                                </th>
-                                <th>
-                                    Customer Name
-                                </th>
-                                <th>
-                                    Payment Method
-                                </th>
-                                <th>
-                                    Amount
-                                </th>
-                            </tr>
-                        </thead>
+                       
                         <?php
                         $db = new Dbobjects;
                         $db->tableName = 'restaurant_listing';
@@ -74,15 +61,43 @@ import("apps/view/inc/navbar.php");
                         foreach ($my_rest as $rest) {
                             $payment_list = $payObj->filter_index(array('rest_id' => $rest['id']));
                         ?>
-                            <tbody>
+                            
                                 <?php
                                 foreach ($payment_list as $pl) {
                                     $pl = (object) $pl;
                                     $buyer = (object)$db->showOne("select * from pk_user where id = $pl->user_id");
-                                ?>
+                                ?> 
+                    <table class="table table-bordered table-success">
+                                
+                                <thead>
+                                <tr>
+                                    <th>
+                                        DBID
+                                    </th>
+                                    <th>
+                                        Order Id
+                                    </th>
+                                    <th>
+                                        Order By
+                                    </th>
+                                    <th>
+                                        Customer Name
+                                    </th>
+                                    <th>
+                                        Payment Method
+                                    </th>
+                                    <th>
+                                        Amount
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
                                     <tr>
                                         <td>
                                             <?php echo $pl->id; ?>
+                                        </td>
+                                        <td>
+                                            <?php echo $pl->unique_id; ?>
                                         </td>
                                         <td>
                                             <?php echo $buyer->email; ?>
@@ -101,7 +116,7 @@ import("apps/view/inc/navbar.php");
                                     <table class="table table-primary table-bordered">
                                         <tr>
                                             <th>Food ID</th>
-                                            <th>Food Name</th>
+                                            <th>Food</th>
                                             <th>Qty</th>
                                             <th>Cost/Item</th>
                                             <th>Total</th>
@@ -115,7 +130,11 @@ import("apps/view/inc/navbar.php");
                                         ?>
                                             <tr>
                                                 <td><?php echo $food->id; ?></td>
-                                                <td><?php echo $food->title; ?></td>
+                                                
+                                                <td>
+                                                <p><?php echo $food->title; ?></p>
+                                                <img class="food-img" src="/<?php echo MEDIA_URL."/images/pages/".$food->banner; ?>" alt="<?php echo $food->title; ?>">
+                                                </td>
                                                 <td><?php echo $cv->qty; ?></td>
                                                 <td><?php echo $cv->price; ?></td>
                                                 <td><?php echo round(($cv->price * $cv->qty), 2); ?></td>
@@ -127,12 +146,13 @@ import("apps/view/inc/navbar.php");
                                 <?php
                                 } ?>
                             </tbody>
+                            </table>
                         <?php
                         }
                         ?>
 
 
-                    </table>
+                   
                 </div>
             </div>
 
