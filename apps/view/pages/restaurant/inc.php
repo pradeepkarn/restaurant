@@ -8,10 +8,13 @@
             <a href="/<?php echo home."/restaurant-orders"; ?>">Orders</a>
         </li>
         <li>
+            <a href="/<?php echo home."/food-listing"; ?>">Add food</a>
+        </li>
+        <li>
             <a href="/<?php echo home."/my-listed-foods"; ?>">My listed foods</a>
         </li>
         <li>
-            <a href="#">Settings</a>
+            <a href="/<?php echo home."/restaurant-settings"; ?>">Settings</a>
         </li>
     </ul>
 </nav>

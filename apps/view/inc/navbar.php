@@ -11,7 +11,15 @@
             </form>
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/<?php echo home; ?>/user-dashboard">My Account</a>
+                <?php 
+                $account_link = "user-dashboard";
+                if (USER['is_restaurant'] == 1){
+                    $account_link = "restaurant-dashboard";
+                }else{
+                    $account_link = "user-dashboard";
+                }
+                ?>
+                        <a class="nav-link active" aria-current="page" href="/<?php echo home."/$account_link"; ?>">My Account</a>
                     </li>
                 <?php
                 if (authenticate() == true) {

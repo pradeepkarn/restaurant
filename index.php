@@ -486,6 +486,37 @@ switch ($path) {
       }
       echo go_to("");
     }
+    if ($url[0] == "restaurant-settings") {
+      if (authenticate()) {
+        if (USER['is_restaurant'] == 1) {
+          import("apps/view/pages/restaurant/settings.php");
+          return;
+        }
+      }
+      echo go_to('restaurant-login');
+      return;
+    }
+    if ($url[0] == "update-my-profile") {
+      if (authenticate()) {
+        if (USER['is_restaurant'] == 1) {
+          $db = new Dbobjects;
+          $db->tableName = 'pk_user';
+          $db->insertData['first_name'] = isset($_POST['first_name'])?$_POST['first_name']:USER['first_name'];
+          $db->insertData['last_name'] = isset($_POST['last_name'])?$_POST['last_name']:USER['last_name'];
+          $db->pk(USER['id']);
+          $upadate = $db->update();
+          if ($upadate) {
+            echo js_alert('Updated');
+            echo RELOAD;
+            return;
+          }
+        }
+      }else{
+        echo js_alert('You are not logged in');
+        return;
+      }
+      return;
+    }
     if ($url[0] == "edit-food-category") {
       if (is_superuser()) {
         import("apps/admin/pages/edit-food-category.php");

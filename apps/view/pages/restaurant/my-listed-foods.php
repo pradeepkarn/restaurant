@@ -100,14 +100,16 @@ import("apps/view/inc/navbar.php");
                                 <tbody>
                                     <tr>
                                         <td>
-                                            <a target="_blank" href="/<?php echo home."/edit-my-listed-food/?food_id=$fl->id"; ?>" class="btn btn-outline-danger">Edit</button>
+                                            <a target="_blank" href="/<?php echo home . "/edit-my-listed-food/?food_id=$fl->id"; ?>" class="btn btn-outline-danger">Edit</button>
                                         </td>
                                         <td>
                                             <?php echo $fl->id; ?>
                                         </td>
                                         <td>
-                                            <?php echo $fl->title; ?>
+                                            <p><?php echo $fl->title; ?></p>
+                                            <img class="food-img" src="/<?php echo MEDIA_URL . "/images/pages/" . $fl->banner; ?>" alt="<?php echo $fl->title; ?>">
                                         </td>
+
                                         <td>
                                             <?php echo $fl->price; ?>
                                         </td>
