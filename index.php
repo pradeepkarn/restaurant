@@ -394,6 +394,26 @@ switch ($path) {
       echo go_to('restaurant-login');
       return;
     }
+    if ($url[0] == "my-listed-foods") {
+      if (authenticate()) {
+        if (USER['is_restaurant'] == 1) {
+          import("apps/view/pages/restaurant/my-listed-foods.php");
+          return;
+        }
+      }
+      echo go_to('restaurant-login');
+      return;
+    }
+    if ($url[0] == "edit-my-listed-food") {
+      if (authenticate()) {
+        if (USER['is_restaurant'] == 1) {
+          import("apps/view/pages/restaurant/edit-my-listed-food.php");
+          return;
+        }
+      }
+      echo go_to('restaurant-login');
+      return;
+    }
     if ($url[0] == "restaurant-login-ajax") {
       $rstrnt = new Rest_ctrl;
       if ($rstrnt->login()) {
@@ -568,6 +588,96 @@ switch ($path) {
 
 
       $id = $foodItem->store($arr);
+      // myprint($id);
+      if (intval($id)) {
+        $foodItemDetails = new Model('content_details');
+        for ($i = 0; $i < count($_FILES['food_img']['name']); $i++) {
+          if ($_FILES['food_img']['name'][$i] === "") {
+            echo js_alert("Please select a valid file");
+            return;
+          }
+
+          $obj_grp = "product_more_img";
+          $obj_id = $id;
+
+          $arr['content_group'] = "product_more_img";
+          $arr['content_id'] = $id;
+          $arr['status'] = "approved";
+
+          // $arr['details'] = $_POST['food_img_name'][$i];
+
+          $file_with_ext = $_FILES['food_img']['name'][$i];
+          if (!empty($_FILES['food_img']['name'][$i])) {
+            $only_file_name = filter_name($file_with_ext);
+            $only_file_name = $only_file_name . "{$obj_id}{$obj_grp}_" . random_int(100000, 999999);
+            $target_dir = RPATH . "/media/images/pages/";
+            $file_ext_arr = explode(".", $file_with_ext);
+            $ext = end($file_ext_arr);
+            $target_file = $target_dir . "{$only_file_name}." . $ext;
+
+            $allowed_mime_types = [
+              "application/pdf",
+              "image/png",
+              "image/jpeg",
+              "image/jpg",
+              "video/mp4",
+            ];
+
+            if (in_array($_FILES['food_img']['type'][$i], $allowed_mime_types)) {
+              if (move_uploaded_file($_FILES['food_img']['tmp_name'][$i], $target_file)) {
+                $_SESSION['msg'][] = "File $file_with_ext has been uploaded";
+                $filename = $only_file_name . "." . $ext;
+                $arr['content'] = $filename;
+                $foodItemDetails->store($arr);
+              }
+            } else {
+              $_SESSION['msg'][] = "$file_with_ext is an invalid file";
+            }
+          }
+        }
+        echo js_alert('Food Item uploaded successfully');
+        echo RELOAD;
+        return;
+      } else {
+        echo js_alert('Food Item not uploaded');
+      }
+      return;
+    }
+    if ($url[0] == "update-food-ajax") {
+      // myprint($_POST);
+      // return;
+      $arr = null;
+      $foodItem = new Model('content');
+      $foodid = $_POST['food_id'];
+      $arr['parent_id'] = $_POST['food_cat'];
+      $arr['title'] = $_POST['food_name'];
+      $arr['price'] = $_POST['food_price'];
+      $arr['content'] = $_POST['food_desc'];
+      $arr['content_info'] = $_POST['food_ingridients'];
+      $arr['other_content'] = $_POST['food_info'];
+      $arr['content_group'] = 'food_listing_category';
+      $arr['status'] = 'listed';
+      // For Image
+      $food_image = $_FILES['food_img']['name'][0];
+      $temp_image = $_FILES['food_img']['tmp_name'][0];
+      // myprint($_FILES);
+      // return;
+      $arr['banner'] = $food_image;
+      move_uploaded_file($temp_image, RPATH . "/media/images/pages/$food_image");
+
+      if ($arr['title'] == "") {
+        echo js_alert('Food name is required');
+        return;
+      }
+      if ($arr['content_info'] == "") {
+        echo js_alert('Food description is required');
+        return;
+      }
+
+
+      $id = $foodItem->update($foodid,$arr);
+      echo RELOAD;
+        return;
       // myprint($id);
       if (intval($id)) {
         $foodItemDetails = new Model('content_details');

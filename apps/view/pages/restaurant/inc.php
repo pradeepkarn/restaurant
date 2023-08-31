@@ -8,7 +8,7 @@
             <a href="/<?php echo home."/restaurant-orders"; ?>">Orders</a>
         </li>
         <li>
-            <a href="#">Addresses</a>
+            <a href="/<?php echo home."/my-listed-foods"; ?>">My listed foods</a>
         </li>
         <li>
             <a href="#">Settings</a>
