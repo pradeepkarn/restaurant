@@ -71,7 +71,7 @@ import("apps/view/inc/navbar.php");
                             $dtme = new DateTime($pl->created_at);
                             $ordered_at = $dtme->format('F j, Y \a\t h:i A');
                         ?>
-                            <table class="table table-bordered table-success">
+                            <table class="table table-success table-striped">
 
                                 <thead>
                                     <tr>
@@ -104,9 +104,9 @@ import("apps/view/inc/navbar.php");
                                 <tbody>
                                     <tr>
                                         <td>
-                                            
-                                                <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#orderDetailsModal<?php echo $pl->id; ?>">View Details</button>
-                                            
+
+                                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#orderDetailsModal<?php echo $pl->id; ?>">View Receipt</button>
+
                                         </td>
                                         <td>
                                             <?php echo $pl->id; ?>
@@ -129,6 +129,11 @@ import("apps/view/inc/navbar.php");
                                         </td>
                                         <td>
                                             <?php echo $pl->amount; ?>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center" colspan="8">
+                                            <i class="fas fa-arrow-down"></i>
                                         </td>
                                     </tr>
                                     <table class="table table-primary table-bordered">
@@ -205,7 +210,7 @@ import("apps/view/inc/navbar.php");
                                                             <h6 class="mb-0"><?php echo $food_prod['title']; ?></h6>
                                                             <div class="ord_moddd">
                                                                 <p class="mb-0"><?php echo $pd->qty; ?> X <?php echo $food_prod['price']; ?></p>
-                                                                <p class="mb-0">₹<?php echo round(($pd->price*$pd->qty),2); ?></p>
+                                                                <p class="mb-0">₹<?php echo round(($pd->price * $pd->qty), 2); ?></p>
                                                             </div>
                                                             <span>Quantity: <?php echo $pd->qty; ?></span>
                                                         </div>

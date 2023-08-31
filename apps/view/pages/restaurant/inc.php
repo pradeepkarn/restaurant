@@ -8,9 +8,6 @@
             <a href="/<?php echo home."/restaurant-orders"; ?>">Orders</a>
         </li>
         <li>
-            <a href="#">Payments</a>
-        </li>
-        <li>
             <a href="#">Addresses</a>
         </li>
         <li>
