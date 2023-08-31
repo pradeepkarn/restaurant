@@ -1304,54 +1304,108 @@ function arr($obj)
   return (array) $obj;
 }
 
-function add_to_cart($id,$action="add_to_cart")
+
+function add_to_cart($id, $action = "add_to_cart", $rest_id)
 {
     $live_stock = check_stock_minus_hold($id);
-    // echo js_alert($live_stock);
-    //$_SESSION['cart'] = null;
+
+    if (!isset($_SESSION['rest_id'])) {
+        unset($_SESSION['cart']);
+        $_SESSION['rest_id'] = $rest_id;
+    }
+    else if (($_SESSION['rest_id']) != $rest_id) {
+        unset($_SESSION['cart']);
+        $_SESSION['rest_id'] = $rest_id;
+        return "vendor_changed"; // Return false when rest_id changes
+    }
+
     if (isset($_SESSION['cart'][$id])) {
-        if ($action=='buy_now') {
+        if ($action == 'buy_now') {
             return;
-        }
-        else{
-            if ($live_stock>=1) {
+        } else {
+            if ($live_stock >= 1) {
                 $_SESSION['cart'][$id]['id'] = $id;
                 $_SESSION['cart'][$id]['qty'] += 1;
                 return true;
-            }
-            else{
+            } else {
                 return false;
             }
-            
         }
-        
-    }
-    else{
-        if ($live_stock>=1) {
+    } else {
+        if ($live_stock >= 1) {
             $_SESSION['cart'][$id]['id'] = $id;
             $_SESSION['cart'][$id]['qty'] = 1;
             return true;
-        }
-        else{
+        } else {
             return false;
         }
-        
     }
 }
-function remove_from_cart($id){
+
+// function add_to_cart($id,$action="add_to_cart")
+// {
+//     $live_stock = check_stock_minus_hold($id);
+//     // echo js_alert($live_stock);
+//     //$_SESSION['cart'] = null;
+//     if (isset($_SESSION['cart'][$id])) {
+//         if ($action=='buy_now') {
+//             return;
+//         }
+//         else{
+//             if ($live_stock>=1) {
+//                 $_SESSION['cart'][$id]['id'] = $id;
+//                 $_SESSION['cart'][$id]['qty'] += 1;
+//                 return true;
+//             }
+//             else{
+//                 return false;
+//             }
+            
+//         }
+        
+//     }
+//     else{
+//         if ($live_stock>=1) {
+//             $_SESSION['cart'][$id]['id'] = $id;
+//             $_SESSION['cart'][$id]['qty'] = 1;
+//             return true;
+//         }
+//         else{
+//             return false;
+//         }
+        
+//     }
+// }
+// function remove_from_cart($id){
+//   if (isset($_SESSION['cart'][$id])) {
+//       if ($_SESSION['cart'][$id]['qty']>1) {
+//           $_SESSION['cart'][$id]['id'] = $id;
+//           $_SESSION['cart'][$id]['qty'] -= 1;
+//       }
+//       else{
+//           unset($_SESSION['cart'][$id]);
+//       }
+//   }
+//   if (count($_SESSION['cart'])==0) {
+//       unset($_SESSION['cart']);
+//       unset($_SESSION['rest_id']);
+//   }
+// }
+function remove_from_cart($id) {
   if (isset($_SESSION['cart'][$id])) {
-      if ($_SESSION['cart'][$id]['qty']>1) {
-          $_SESSION['cart'][$id]['id'] = $id;
+      if ($_SESSION['cart'][$id]['qty'] > 1) {
           $_SESSION['cart'][$id]['qty'] -= 1;
-      }
-      else{
+      } else {
           unset($_SESSION['cart'][$id]);
       }
   }
-  if (count($_SESSION['cart'])==0) {
+
+  if (empty($_SESSION['cart'])) {
       unset($_SESSION['cart']);
+      unset($_SESSION['rest_id']);
   }
 }
+
 function check_stock_minus_hold($prodid){
   $item = new Mydb('content');
   $prod = $item->pkData($prodid);

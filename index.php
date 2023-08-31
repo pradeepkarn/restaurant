@@ -137,7 +137,7 @@ switch ($path) {
         echo js_alert('Menu Name Cannot Be Empty');
         return;
       }
-      
+
       // For Image
       $menu_image = $_FILES['menu_img']['name'][0];
       $temp_image = $_FILES['menu_img']['tmp_name'][0];
@@ -149,7 +149,7 @@ switch ($path) {
       // myprint($_FILES);
       // return;
       $arr['banner'] = $menu_image;
-      move_uploaded_file($temp_image, RPATH."/media/images/menu/$menu_image");
+      move_uploaded_file($temp_image, RPATH . "/media/images/menu/$menu_image");
       // myprint($menu_image);
       // return;
       try {
@@ -158,52 +158,52 @@ switch ($path) {
           $menuItemDetails = new Model('content_details');
           for ($i = 0; $i < count($_FILES['menu_img']['name']); $i++) {
             if ($_FILES['menu_img']['name'][$i] === "") {
-                echo js_alert("Please select a valid file");
-                return;
+              echo js_alert("Please select a valid file");
+              return;
             }
-  
+
             $obj_grp = "menu_more_img";
             $obj_id = $id;
-  
+
             $arr['content_group'] = "menu_more_img";
             $arr['content_id'] = $id;
             $arr['status'] = "approved";
-  
+
             // $arr['details'] = $_POST['food_img_name'][$i];
-  
+
             $file_with_ext = $_FILES['menu_img']['name'][$i];
             if (!empty($_FILES['menu_img']['name'][$i])) {
-                $only_file_name = filter_name($file_with_ext);
-                $only_file_name = $only_file_name."{$obj_id}{$obj_grp}_".random_int(100000, 999999);
-                $target_dir = RPATH . "/media/images/menu/";
-                $file_ext_arr = explode(".", $file_with_ext);
-                $ext = end($file_ext_arr);
-                $target_file = $target_dir . "{$only_file_name}." . $ext;
-  
-                $allowed_mime_types = [
-                    "image/png",
-                    "image/jpeg",
-                    "image/jpg",
-                ];
-  
-                if (in_array($_FILES['menu_img']['type'][$i], $allowed_mime_types)) {
-                    if (move_uploaded_file($_FILES['menu_img']['tmp_name'][$i], $target_file)) {
-                        $_SESSION['msg'][] = "File $file_with_ext has been uploaded";
-                        $filename = $only_file_name.".".$ext;
-                        $arr['content'] = $filename;
-                        $menuItemDetails->store($arr);
-                    }
-                } else {
-                    $_SESSION['msg'][] = "$file_with_ext is an invalid file";
+              $only_file_name = filter_name($file_with_ext);
+              $only_file_name = $only_file_name . "{$obj_id}{$obj_grp}_" . random_int(100000, 999999);
+              $target_dir = RPATH . "/media/images/menu/";
+              $file_ext_arr = explode(".", $file_with_ext);
+              $ext = end($file_ext_arr);
+              $target_file = $target_dir . "{$only_file_name}." . $ext;
+
+              $allowed_mime_types = [
+                "image/png",
+                "image/jpeg",
+                "image/jpg",
+              ];
+
+              if (in_array($_FILES['menu_img']['type'][$i], $allowed_mime_types)) {
+                if (move_uploaded_file($_FILES['menu_img']['tmp_name'][$i], $target_file)) {
+                  $_SESSION['msg'][] = "File $file_with_ext has been uploaded";
+                  $filename = $only_file_name . "." . $ext;
+                  $arr['content'] = $filename;
+                  $menuItemDetails->store($arr);
                 }
+              } else {
+                $_SESSION['msg'][] = "$file_with_ext is an invalid file";
+              }
             }
-        }
+          }
           echo js_alert('Menu uploaded successfully');
           echo RELOAD;
           return;
-          }else{
-            echo js_alert('Menu not uploaded');
-          }
+        } else {
+          echo js_alert('Menu not uploaded');
+        }
       } catch (PDOException $th) {
         echo js_alert('Menu not uploaded');
         // throw $th;
@@ -281,7 +281,7 @@ switch ($path) {
     if ($url[0] == "driver-register-ajax") {
       $drvr = new Driver_ctrl;
       $reply = $drvr->register();
-      if ($reply==true) {
+      if ($reply == true) {
         echo go_to('driver-login');
         exit;
       }
@@ -324,7 +324,7 @@ switch ($path) {
     if ($url[0] == "register-ajax") {
       $drvr = new User_ctrl;
       $reply = $drvr->register();
-      if ($reply==true) {
+      if ($reply == true) {
         echo go_to('login');
         exit;
       }
@@ -360,49 +360,49 @@ switch ($path) {
     }
 
 
-// Restaurant login template page
-if ($url[0] == "restaurant-login") {
-  $home = home;
-  if (authenticate()) {
-    if (USER['is_restaurant'] == 1) {
-      header("Location:/$home");
+    // Restaurant login template page
+    if ($url[0] == "restaurant-login") {
+      $home = home;
+      if (authenticate()) {
+        if (USER['is_restaurant'] == 1) {
+          header("Location:/$home");
+          return;
+        }
+      }
+      import("apps/view/pages/restaurant/login.php");
       return;
     }
-  }
-  import("apps/view/pages/restaurant/login.php");
-  return;
-}
 
 
-if ($url[0] == "restaurant-dashboard") {
-  if (authenticate()) {
-    if (USER['is_restaurant'] == 1) {
-      import("apps/view/pages/restaurant/restaurant-dashboard.php");
+    if ($url[0] == "restaurant-dashboard") {
+      if (authenticate()) {
+        if (USER['is_restaurant'] == 1) {
+          import("apps/view/pages/restaurant/restaurant-dashboard.php");
+          return;
+        }
+      }
+      echo go_to('restaurant-login');
       return;
     }
-  }
-  echo go_to('restaurant-login');
-  return;
-}
-if ($url[0] == "restaurant-orders") {
-  if (authenticate()) {
-    if (USER['is_restaurant'] == 1) {
-      import("apps/view/pages/restaurant/order-list.php");
+    if ($url[0] == "restaurant-orders") {
+      if (authenticate()) {
+        if (USER['is_restaurant'] == 1) {
+          import("apps/view/pages/restaurant/order-list.php");
+          return;
+        }
+      }
+      echo go_to('restaurant-login');
       return;
     }
-  }
-  echo go_to('restaurant-login');
-  return;
-}
-if ($url[0] == "restaurant-login-ajax") {
-  $rstrnt = new Rest_ctrl;
-  if ($rstrnt->login()) {
-    echo go_to('restaurant-dashboard');
-    
-    exit;
-  }
-  return;
-}
+    if ($url[0] == "restaurant-login-ajax") {
+      $rstrnt = new Rest_ctrl;
+      if ($rstrnt->login()) {
+        echo go_to('restaurant-dashboard');
+
+        exit;
+      }
+      return;
+    }
 
     // Admin Dashboard
     if ($url[0] == "admin-login") {
@@ -640,91 +640,93 @@ if ($url[0] == "restaurant-login-ajax") {
     }
 
     if ($url[0] == "send-add-item-ajax") {
-      if (isset($_POST['item_id']) && filter_var($_POST['item_id'],FILTER_VALIDATE_INT)) {
+      if (isset($_POST['item_id']) && filter_var($_POST['item_id'], FILTER_VALIDATE_INT)) {
         $prodid = $_POST['item_id'];
+        $restid = $_POST['rest_id'];
         $product = (new Model('content'))->show($prodid);
-        if ($product==false) {
-            die();
-        }
-        else{
-            if(add_to_cart($prodid)==false){
-                echo swt_alert_err('Product is out of stock');
-                return;
-            }
-            if(isset($_POST['page']) && $_POST['page']=="home"){
-                echo "<h3>Added in cart <i class='fa-solid fa-check'></i></h3>";
-                return;
-            }
-            echo swt_alert_suc('Item added successfully');
-        }
-    }
-    die();
-    
-  }
-  if ($url[0] == "add-item-ajax") {
-    if (isset($_POST['item_id']) && filter_var($_POST['item_id'],FILTER_VALIDATE_INT)) {
-      $prodid = $_POST['item_id'];
-      $product = (new Model('content'))->show($prodid);
-      if ($product==false) {
+        if ($product == false) {
           die();
-      }
-      else{
-          if(add_to_cart($prodid)==false){
-              echo swt_alert_err('Product is out of stock');
-              return;
+        } else {
+          if (add_to_cart(id: $prodid, rest_id: $restid) == false) {
+            echo swt_alert_err('Product is out of stock');
+            return;
           }
-          if(isset($_POST['page']) && $_POST['page']=="home"){
-              echo "<h3>Added in cart <i class='fa-solid fa-check'></i></h3>";
-              return;
+          if (isset($_POST['page']) && $_POST['page'] == "home") {
+            echo "<h3>Added in cart <i class='fa-solid fa-check'></i></h3>";
+            return;
+          }
+          echo swt_alert_suc('Item added successfully');
+        }
+      }
+      die();
+    }
+    if ($url[0] == "add-item-ajax") {
+      if (isset($_POST['rest_id']) && isset($_POST['item_id']) && filter_var($_POST['item_id'], FILTER_VALIDATE_INT)) {
+        $prodid = $_POST['item_id'];
+        $restid = $_POST['rest_id'];
+        $product = (new Model('content'))->show($prodid);
+        if ($product == false) {
+          die();
+        } else {
+          $cart_add = add_to_cart(id: $prodid, action:'add_to_cart', rest_id: $restid);
+          if ($cart_add == false) {
+            echo swt_alert_err('Product is out of stock');
+            return;
+          }else if($cart_add==="vendor_changed"){
+            echo js_alert('Your cart is reset.');
+            echo RELOAD;
+            return;
+          }
+          if (isset($_POST['page']) && $_POST['page'] == "home") {
+            echo "<h3>Added in cart <i class='fa-solid fa-check'></i></h3>";
+            return;
           }
           echo RELOAD;
           // echo swt_alert_suc('Item added successfully');
+        }
       }
-  }
-  die();
-  
-}
+      return;
+    }
 
-  if ($url[0] == "purchase-decrease-qty-ajax") {
-     
-    if (isset($_POST['item_id']) && filter_var($_POST['item_id'],FILTER_VALIDATE_INT)) {
-      $prodid = $_POST['item_id'];
-      $product = (new Model('content'))->show($prodid);
-      if ($product==false) {
+    if ($url[0] == "purchase-decrease-qty-ajax") {
+
+      if (isset($_POST['item_id']) && filter_var($_POST['item_id'], FILTER_VALIDATE_INT)) {
+        $prodid = $_POST['item_id'];
+        $product = (new Model('content'))->show($prodid);
+        if ($product == false) {
           die();
-      }
-      else{
-          if(isset($_SESSION['cart'])){
-              remove_from_cart($prodid);
-              echo js('location.reload();');
-              return;
+        } else {
+          if (isset($_SESSION['cart'])) {
+            remove_from_cart($prodid);
+            echo js('location.reload();');
+            return;
           }
+        }
       }
-  }
-  die();
-  }
-  if ($url[0] == "purchase-increase-qty-ajax") {
-      
-    if (isset($_POST['item_id']) && filter_var($_POST['item_id'],FILTER_VALIDATE_INT)) {
-      $prodid = $_POST['item_id'];
-      $product = (new Model('content'))->show($prodid);
-      if ($product==false) {
+      die();
+    }
+    if ($url[0] == "purchase-increase-qty-ajax") {
+
+      if (isset($_POST['item_id']) && filter_var($_POST['item_id'], FILTER_VALIDATE_INT)) {
+        $prodid = $_POST['item_id'];
+        $restid = $_POST['rest_id'];
+        $product = (new Model('content'))->show($prodid);
+        if ($product == false) {
           die();
-      }
-      else{
-          if(add_to_cart($prodid)==false){
-              echo js_alert('Product is out of stock');
-              return;
+        } else {
+          if (add_to_cart(id: $prodid, action:'add_to_cart', rest_id: $restid) == false) {
+            echo js_alert('Product is out of stock');
+            return;
           }
-          if(isset($_POST['page']) && $_POST['page']=="home"){
-              echo "<h3>Added in cart <i class='fa-solid fa-check'></i></h3>";
-              return;
+          if (isset($_POST['page']) && $_POST['page'] == "home") {
+            echo "<h3>Added in cart <i class='fa-solid fa-check'></i></h3>";
+            return;
           }
           echo swt_alert_suc('Item added successfully');
+        }
       }
-  }
-  die();
-  }
+      die();
+    }
 
     ################## Order Placement ################################
     if ($url[0] == "place-order-ajax") {
@@ -733,93 +735,93 @@ if ($url[0] == "restaurant-login-ajax") {
         return;
       }
       $req = (object) ($_POST);
-        if ($req) {
-            $arr = null;
-            $placeOrder = new Model('payment');
-            $addrs = (object) ($_POST);
-            if (!isset($_POST['payment_mode'])) {
-                $_SESSION['msg'][] = 'Please select payment mode';
-                return false;
-            }
-            if ($_POST['payment_mode'] == '') {
-                echo js_alert('Please select payment mode');
-                return;
-            }
-            try {
-                $arr['amount'] = $addrs->total_amount;
-            } catch (PDOException $e) {
-                return false;
-            }
-            if (
-                $addrs->fname == '' ||
-                $addrs->mobile == '' ||
-                $addrs->locality == '' ||
-                $addrs->city == '' ||
-                $addrs->state == '' ||
-                $addrs->country == '' ||
-                $addrs->zipcode == '' ||
-                $addrs->isd_code == ''
-            ) {
-                // $_SESSION['msg'][] = 'Please check your primary address and make sure you have entered all the details';
-                echo js_alert('All Fields are required');
-                return false;
-            }
-            $arr['user_id'] = $_SESSION['user_id'];
-            $arr['fname'] = $addrs->fname;
-            $arr['lname'] = $addrs->lname;
-            $arr['mobile'] = $addrs->mobile;
-            $arr['isd_code'] = $addrs->isd_code;
-            $arr['locality'] = $addrs->locality;
-            $arr['city'] = $addrs->city;
-            $arr['state'] = $addrs->state;
-            $arr['country'] = $addrs->country;
-            $arr['zipcode'] = $addrs->zipcode;
-            $arr['rest_id'] = $addrs->restaurant_id;
-            $arr['payment_method'] = sanitize_remove_tags($_POST['payment_mode']);
-
-            $arr['unique_id'] = uniqid();
-
-            $arr['status'] = 'paid';
-
-            try {
-                $pay = $placeOrder->store($arr);
-            } catch (PDOException $th) {
-                $_SESSION['msg'][] = $th;
-                $pay = false;
-            }
-            if (intval($pay)) {
-              $custOrder = new Model('customer_order');
-              $user_id = $_SESSION['user_id'];
-              $payment_id = $pay;
-              
-              // Iterate over each product
-              for ($i = 0; $i < count($_POST['food_id']); $i++) {
-                  $arr = array(
-                      'user_id' => $user_id,
-                      'payment_id' => $payment_id,
-                      'item_id' => $_POST['food_id'][$i],
-                      'rest_id' => $_POST['rest_id'][$i],
-                      'qty' => $_POST['qty'][$i],
-                      'price' => $_POST['price'][$i],
-                      'status' => 'paid',
-                      'updated_at' => date('Y-m-d H:i:s')
-                  );
-          
-                  // execute payment data
-                  $paid = $custOrder->store($arr);
-              }
-          
-              echo js_alert('Order placed');
-              session_destroy();
-              echo go_to("");
-          
-              $my_email = null;
-          }else {
-                // $_SESSION['msg'][] = 'Order not placed';
-                echo js_alert('Order not placed');
-                return false;
-            }
+      if ($req) {
+        $arr = null;
+        $placeOrder = new Model('payment');
+        $addrs = (object) ($_POST);
+        if (!isset($_POST['payment_mode'])) {
+          $_SESSION['msg'][] = 'Please select payment mode';
+          return false;
         }
+        if ($_POST['payment_mode'] == '') {
+          echo js_alert('Please select payment mode');
+          return;
+        }
+        try {
+          $arr['amount'] = $addrs->total_amount;
+        } catch (PDOException $e) {
+          return false;
+        }
+        if (
+          $addrs->fname == '' ||
+          $addrs->mobile == '' ||
+          $addrs->locality == '' ||
+          $addrs->city == '' ||
+          $addrs->state == '' ||
+          $addrs->country == '' ||
+          $addrs->zipcode == '' ||
+          $addrs->isd_code == ''
+        ) {
+          // $_SESSION['msg'][] = 'Please check your primary address and make sure you have entered all the details';
+          echo js_alert('All Fields are required');
+          return false;
+        }
+        $arr['user_id'] = $_SESSION['user_id'];
+        $arr['fname'] = $addrs->fname;
+        $arr['lname'] = $addrs->lname;
+        $arr['mobile'] = $addrs->mobile;
+        $arr['isd_code'] = $addrs->isd_code;
+        $arr['locality'] = $addrs->locality;
+        $arr['city'] = $addrs->city;
+        $arr['state'] = $addrs->state;
+        $arr['country'] = $addrs->country;
+        $arr['zipcode'] = $addrs->zipcode;
+        $arr['rest_id'] = $addrs->restaurant_id;
+        $arr['payment_method'] = sanitize_remove_tags($_POST['payment_mode']);
+
+        $arr['unique_id'] = uniqid();
+
+        $arr['status'] = 'paid';
+
+        try {
+          $pay = $placeOrder->store($arr);
+        } catch (PDOException $th) {
+          $_SESSION['msg'][] = $th;
+          $pay = false;
+        }
+        if (intval($pay)) {
+          $custOrder = new Model('customer_order');
+          $user_id = $_SESSION['user_id'];
+          $payment_id = $pay;
+
+          // Iterate over each product
+          for ($i = 0; $i < count($_POST['food_id']); $i++) {
+            $arr = array(
+              'user_id' => $user_id,
+              'payment_id' => $payment_id,
+              'item_id' => $_POST['food_id'][$i],
+              'rest_id' => $_POST['rest_id'][$i],
+              'qty' => $_POST['qty'][$i],
+              'price' => $_POST['price'][$i],
+              'status' => 'paid',
+              'updated_at' => date('Y-m-d H:i:s')
+            );
+
+            // execute payment data
+            $paid = $custOrder->store($arr);
+          }
+
+          echo js_alert('Order placed');
+          session_destroy();
+          echo go_to("");
+
+          $my_email = null;
+        } else {
+          // $_SESSION['msg'][] = 'Order not placed';
+          echo js_alert('Order not placed');
+          return false;
+        }
+      }
     }
 
     ################## Order Placement ends ################################

@@ -1,5 +1,9 @@
 <?php
 import("apps/view/inc/header.php");
+// unset($_SESSION['rest_id']);
+// unset($_SESSION['cart']);
+// myprint($_SESSION['rest_id']);
+// myprint($_SESSION['cart']);
 ?>
 
 <?php
@@ -85,7 +89,7 @@ import("apps/view/inc/navbar.php");
                                             $.ajax({
                                                 url: "/<?php echo home; ?>/purchase-increase-qty-ajax",
                                                 method: "post",
-                                                data: {item_id: '<?php echo $prod['id']; ?>',action: 'add_to_cart'},
+                                                data: {item_id: '<?php echo $prod['id']; ?>',action: 'add_to_cart', rest_id: '<?php echo $prod['vendor_id']; ?>'},
                                                 dataType: "html",
                                                 success: function(resultValue) {
                                                     // $('#show-cart').html(resultValue)
