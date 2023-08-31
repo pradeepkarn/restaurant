@@ -113,7 +113,7 @@ import("apps/view/inc/navbar.php");
                           <input type="hidden" name="rest_id[]" value="<?php echo $prod['vendor_id']; ?>">
                           <input type="hidden" name="food_id[]" value="<?php echo $prod['id']; ?>">
                           <input type="hidden" name="qty[]" value="<?php echo $qty; ?>">
-                          <input type="hidden" name="price[]" value="<?php echo $cost; ?>">
+                          <input type="hidden" name="price[]" value="<?php echo $net_price; ?>">
                             <td><?php echo $prod['title']; ?> x <?php echo $qty; ?></td>
                             <td class="text-end"><strong>Rs <?php echo $cost; ?></strong></td>
                           </tr>

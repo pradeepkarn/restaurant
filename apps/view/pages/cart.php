@@ -54,11 +54,11 @@ import("apps/view/inc/navbar.php");
                 
                   <tr>
                     <td><img style="margin-right: 10px;" src="/<?php echo MEDIA_URL ?>/images/pages/<?php echo $prod['banner']; ?>" width="100px" height="100px" alt="" srcset=""> <strong><?php echo $prod['title']; ?></strong></td>
-                    <td><strong>Rs <?php echo $cost; ?></strong></td>
+                    <td><strong>Rs <?php echo $net_price; ?></strong></td>
                     <td>
                     <div class="input-group product_data mb-3" style="width: 130px;">
                       <input type="hidden" class="qty<?php echo $id; ?>" name="cart_id" value="<?php echo $id; ?>">
-                      <input type="hidden" class="qty<?php echo $id; ?>" name="price" value="<?php echo $cost; ?>">
+                      <input type="hidden" class="qty<?php echo $id; ?>" name="price" value="<?php echo $net_price; ?>">
                       <input type="hidden" name="rest_id" value="<?php echo $prod['vendor_id']; ?>">
                       <button id="decrease-btn<?php echo $id; ?>" class="input-group-text decrement-btn<?php echo $prod['id']; ?>">-</button>
                       <script>

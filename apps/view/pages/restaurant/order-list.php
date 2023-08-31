@@ -111,14 +111,14 @@ import("apps/view/inc/navbar.php");
                                         foreach ($cart as $cv) {
                                             $cv = obj($cv);
                                             $food = (object) $db->showOne("select * from content where id = $cv->item_id");
-                                            
+
                                         ?>
                                             <tr>
                                                 <td><?php echo $food->id; ?></td>
                                                 <td><?php echo $food->title; ?></td>
                                                 <td><?php echo $cv->qty; ?></td>
                                                 <td><?php echo $cv->price; ?></td>
-                                                <td><?php echo round(($cv->price*$cv->qty),2); ?></td>
+                                                <td><?php echo round(($cv->price * $cv->qty), 2); ?></td>
                                             </tr>
                                         <?php }
                                         ?>
