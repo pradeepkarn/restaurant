@@ -28,7 +28,6 @@ import("apps/admin/inc/topbar.php");
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">User</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Mobile</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
-                      <th class="text-secondary opacity-7"></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -53,19 +52,9 @@ import("apps/admin/inc/topbar.php");
                         <p class="text-xs font-weight-bold mb-0"><?php echo $ul->mobile; ?></p>
                       </td>
                       <td class="align-middle text-center text-sm">
-                        
                         <span class="badge badge-sm bg-gradient-success">Listed</span>
-                         
-                          
-                          
-                        
                       </td>
                       
-                      <td class="align-middle">
-                        <a href="" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                          View
-                        </a>
-                      </td>
                     </tr>
                     <?php 
               }

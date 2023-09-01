@@ -13,6 +13,14 @@ class Order_ctrl
                 $_SESSION['msg'][] = 'Please select payment mode';
                 return false;
             }
+            if (!isset($addrs->lat) || !isset($addrs->lon) || !isset($addrs->address)) {
+                $_SESSION['msg'][] = 'Location is compulsory';
+                return false;
+            }
+            if (empty($addrs->lat) || empty($addrs->lon) || empty($addrs->address)) {
+                $_SESSION['msg'][] = 'Location is compulsory';
+                return false;
+            }
             if ($_POST['payment_mode'] == '') {
                 echo js_alert('Please select payment mode');
                 return;
@@ -48,6 +56,9 @@ class Order_ctrl
             $arr['state'] = $addrs->state;
             $arr['country'] = $addrs->country;
             $arr['zipcode'] = $addrs->zipcode;
+            $arr['landmark'] = isset($addrs->address)?$addrs->address:null;
+            $arr['lat'] = isset($addrs->lat)?$addrs->lat:null;
+            $arr['lon'] = isset($addrs->lon)?$addrs->lon:null;
             $arr['payment_method'] = sanitize_remove_tags($_POST['payment_mode']);
 
             $arr['unique_id'] = uniqid();

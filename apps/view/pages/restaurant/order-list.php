@@ -133,7 +133,9 @@ import("apps/view/inc/navbar.php");
                                     </tr>
                                     <tr>
                                         <td class="text-center" colspan="8">
-                                            <i class="fas fa-arrow-down"></i>
+                                            <b>Restaurant Address:</b> <?php echo $rest->rest_location; ?> <br>
+                                            <i class="fas fa-arrow-down"></i> <b><?php echo $pl->distance>0?round(($pl->distance/1000),2)."KM":null; ?></b> <br>
+                                            <b>User Address:</b> <?php echo $pl->landmark; ?> <br>
                                         </td>
                                     </tr>
                                     <table class="table table-primary table-bordered">

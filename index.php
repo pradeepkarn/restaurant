@@ -1,16 +1,15 @@
 
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+  @ob_start();
+  @session_start();
+}
 require_once(__DIR__ . "/config.php");
+define("direct_access", 1);
 import("/includes/class-autoload.inc.php");
-import("functions.php");
 import("functions.php");
 $url = explode("/", $_SERVER["QUERY_STRING"]);
 $path = $_SERVER["QUERY_STRING"];
-define("direct_access", 1);
-// $GLOBALS['row_id'] = end($url);
-// $GLOBALS['tableName'] = prev($url);
-// $GLOBALS['url_last_param'] = end($url);
-// $GLOBALS['url_2nd_last_param'] = prev($url);
 $home = home;
 define('RELOAD', js("location.reload();"));
 define('URL', $url);
@@ -30,20 +29,16 @@ if (authenticate() == true) {
   $pass = false;
   define('PASS', $pass);
 }
-
-
-$context = array();
 // Login via cookie
 if (isset($_COOKIE['remember_token'])) {
   $acc = new Account;
   $acc->loginWithCookie($_COOKIE['remember_token']);
 }
 //login via cookie ends
-
 switch ($path) {
   case '':
-    if (isset($_POST['submit'])) {
-    }
+    // if (isset($_POST['submit'])) {
+    // }
 
     import("apps/view/pages/home.php");
     break;
@@ -496,22 +491,51 @@ switch ($path) {
       echo go_to('restaurant-login');
       return;
     }
+    if ($url[0] == "driver-settings") {
+      if (authenticate()) {
+        if (USER['is_driver'] == 1) {
+          import("apps/view/pages/drivers/settings.php");
+          return;
+        }
+      }
+      echo go_to('restaurant-login');
+      return;
+    }
+    if ($url[0] == "all-restaurant-orders") {
+      if (authenticate()) {
+        if (USER['is_driver'] == 1) {
+          import("apps/view/pages/drivers/order-list.php");
+          return;
+        }
+      }
+      echo go_to('restaurant-login');
+      return;
+    }
     if ($url[0] == "update-my-profile") {
       if (authenticate()) {
-        if (USER['is_restaurant'] == 1) {
-          $db = new Dbobjects;
-          $db->tableName = 'pk_user';
-          $db->insertData['first_name'] = isset($_POST['first_name'])?$_POST['first_name']:USER['first_name'];
-          $db->insertData['last_name'] = isset($_POST['last_name'])?$_POST['last_name']:USER['last_name'];
-          $db->pk(USER['id']);
-          $upadate = $db->update();
-          if ($upadate) {
-            echo js_alert('Updated');
-            echo RELOAD;
-            return;
+        $db = new Dbobjects;
+        $db->tableName = 'pk_user';
+        $db->insertData['first_name'] = isset($_POST['first_name']) ? $_POST['first_name'] : USER['first_name'];
+        $db->insertData['last_name'] = isset($_POST['last_name']) ? $_POST['last_name'] : USER['last_name'];
+        $db->insertData['zipcode'] = isset($_POST['zipcode']) ? $_POST['zipcode'] : USER['zipcode'];
+        $loc = isset($_POST['address']) ? $_POST['address'] : USER['address'];
+        $db->insertData['address'] = $loc;
+        $lat = isset($_POST['lat']) ? $_POST['lat'] : USER['lat'];
+        $lon = isset($_POST['lon']) ? $_POST['lon'] : USER['lon'];
+        $db->insertData['lat'] = $lat;
+        $db->insertData['lon'] = $lon;
+        $user = obj(USER);
+        $db->pk(USER['id']);
+        $upadate = $db->update();
+        if ($upadate) {
+          echo js_alert('Updated');
+          if (USER['is_restaurant'] == 1) {
+            $db->show("update restaurant_listing set latitude ='$lat', longitude='$lon', rest_location='$loc' where user_id = '{$user->id}';");
           }
+          echo RELOAD;
+          return;
         }
-      }else{
+      } else {
         echo js_alert('You are not logged in');
         return;
       }
@@ -583,6 +607,21 @@ switch ($path) {
       echo js_alert('Category deleted successfully');
       echo go_to("food-category-table");
       return;
+    }
+
+    if ($url[0] == "orders-history") {
+      if (is_superuser()) {
+        import("apps/admin/pages/orders-history.php");
+        return;
+      }
+      echo go_to("");
+    }
+    if ($url[0] == "order-info") {
+      if (is_superuser()) {
+        import("apps/admin/pages/order-info.php");
+        return;
+      }
+      echo go_to("");
     }
 
     if ($url[0] == "upload-food-ajax") {
@@ -706,9 +745,9 @@ switch ($path) {
       }
 
 
-      $id = $foodItem->update($foodid,$arr);
+      $id = $foodItem->update($foodid, $arr);
       echo RELOAD;
-        return;
+      return;
       // myprint($id);
       if (intval($id)) {
         $foodItemDetails = new Model('content_details');
@@ -809,11 +848,11 @@ switch ($path) {
         if ($product == false) {
           die();
         } else {
-          $cart_add = add_to_cart(id: $prodid, action:'add_to_cart', rest_id: $restid);
+          $cart_add = add_to_cart(id: $prodid, action: 'add_to_cart', rest_id: $restid);
           if ($cart_add == false) {
             echo swt_alert_err('Product is out of stock');
             return;
-          }else if($cart_add==="vendor_changed"){
+          } else if ($cart_add === "vendor_changed") {
             echo js_alert('Your cart is reset.');
             echo RELOAD;
             return;
@@ -855,7 +894,7 @@ switch ($path) {
         if ($product == false) {
           die();
         } else {
-          if (add_to_cart(id: $prodid, action:'add_to_cart', rest_id: $restid) == false) {
+          if (add_to_cart(id: $prodid, action: 'add_to_cart', rest_id: $restid) == false) {
             echo js_alert('Product is out of stock');
             return;
           }
@@ -882,6 +921,14 @@ switch ($path) {
         $addrs = (object) ($_POST);
         if (!isset($_POST['payment_mode'])) {
           $_SESSION['msg'][] = 'Please select payment mode';
+          return false;
+        }
+        if (!isset($addrs->lat) || !isset($addrs->lon) || !isset($addrs->address)) {
+          $_SESSION['msg'][] = 'Location is compulsory';
+          return false;
+        }
+        if (empty($addrs->lat) || empty($addrs->lon) || empty($addrs->address)) {
+          $_SESSION['msg'][] = 'Location is compulsory';
           return false;
         }
         if ($_POST['payment_mode'] == '') {
@@ -918,7 +965,18 @@ switch ($path) {
         $arr['country'] = $addrs->country;
         $arr['zipcode'] = $addrs->zipcode;
         $arr['rest_id'] = $addrs->restaurant_id;
+        $restcord = (object)(new Dbobjects)->showOne("select latitude,longitude from restaurant_listing where id = '$addrs->restaurant_id';");
+        $arr['landmark'] = isset($addrs->address) ? $addrs->address : null;
+        $arr['lat'] = isset($addrs->lat) ? $addrs->lat : null;
+        $arr['lon'] = isset($addrs->lon) ? $addrs->lon : null;
+        $distance = calculateDistance($restcord->latitude,$restcord->longitude,$arr['lat'],$arr['lon']);
+        if (!is_numeric($distance)) {
+          echo js_alert('Invalid location');
+          return;
+        }
+        $arr['distance'] = $distance;
         $arr['payment_method'] = sanitize_remove_tags($_POST['payment_mode']);
+      
 
         $arr['unique_id'] = uniqid();
 
@@ -963,6 +1021,7 @@ switch ($path) {
           return false;
         }
       }
+      return;
     }
 
     ################## Order Placement ends ################################

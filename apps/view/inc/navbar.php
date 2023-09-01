@@ -10,17 +10,20 @@
                 <button class="btn btn-outline-danger" type="submit">Search</button>
             </form>
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-                <?php 
-                $account_link = "user-dashboard";
-                if (USER['is_restaurant'] == 1){
-                    $account_link = "restaurant-dashboard";
-                }else{
+                <li class="nav-item">
+                    <?php
                     $account_link = "user-dashboard";
-                }
-                ?>
-                        <a class="nav-link active" aria-current="page" href="/<?php echo home."/$account_link"; ?>">My Account</a>
-                    </li>
+                    if (isset(USER['is_restaurant']) && USER['is_restaurant'] == 1) {
+                        $account_link = "dirver-dashboard";
+                    }
+                    if (isset(USER['is_driver']) && USER['is_driver'] == 1) {
+                        $account_link = "driver-dashboard";
+                    } else {
+                        $account_link = "user-dashboard";
+                    }
+                    ?>
+                    <a class="nav-link active" aria-current="page" href="/<?php echo home . "/$account_link"; ?>">My Account</a>
+                </li>
                 <?php
                 if (authenticate() == true) {
                 ?>
@@ -40,11 +43,11 @@
                 <?php
                 }
                 ?>
-                
-                
+
+
                 <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/<?php echo home; ?>/cart"><i class="bi bi-cart-fill"><sup><?php echo $GLOBALS['cart_cnt']; ?></sup></i></a>
-                    </li>
+                    <a class="nav-link active" aria-current="page" href="/<?php echo home; ?>/cart"><i class="bi bi-cart-fill"><sup><?php echo $GLOBALS['cart_cnt']; ?></sup></i></a>
+                </li>
             </ul>
 
         </div>

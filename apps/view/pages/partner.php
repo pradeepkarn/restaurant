@@ -13,12 +13,11 @@ import("apps/view/inc/header.php");
                 <div class="col-7">
                     <h2>Partner with Deal City</h2>
                     <h2>at 0% commission for the 1st month!</h2>
-                    <p class="pt-3 pb-3 m-0">And get ads worth INR 1500. Valid for new restaurant partners in select cities.</p>
+                    <p class="pt-3 pb-3 m-0">And get ads worth $20. Valid for new restaurant partners in select cities.</p>
                     <div class="reg_btn">
                         <a href="/<?php echo home ?>/restaurant-listing" class="btn btn-primary">Register your restaurant</a>
-                        <a href="/<?php echo home ?>/food-listing" class="btn btn-light">List your Food</a>
-                        <a href="/<?php echo home ?>/my-restaurant" class="btn btn-primary">View your existing restaurants</a>
-                        <p class="pt-3">Need help? Please email us at abcd@dealcity.com</p>
+                        <a href="/<?php echo home ?>/restaurant-login" class="btn btn-light">Restaurant Login</a>
+                        <p class="pt-3">Need help? Please email us at partners@dealcityafrica.com</p>
                     </div>
                 </div>
             </div>

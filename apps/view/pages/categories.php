@@ -9,7 +9,7 @@ if (!intval($_GET['cid'])) {
     exit;
 }
 $prod = getData('restaurant_listing',$_GET['cid']);
-myprint($prod);
+// myprint($prod);
 $rlid = $_GET['cid'];
 
  

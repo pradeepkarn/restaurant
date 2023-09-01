@@ -17,28 +17,7 @@ import("apps/view/inc/navbar.php");
 
 <div class="wrapper">
     <!-- Sidebar  -->
-    <nav id="sidebar">
-
-
-        <ul class="list-unstyled components">
-            <li class="active">
-                <a href="#">My Restaurant</a>
-
-            </li>
-            <li>
-                <a href="#">Favourites</a>
-            </li>
-            <li>
-                <a href="#">Payments</a>
-            </li>
-            <li>
-                <a href="#">Addresses</a>
-            </li>
-            <li>
-                <a href="#">Settings</a>
-            </li>
-        </ul>
-    </nav>
+    <?php import("apps/view/pages/drivers/inc.php"); ?>
 
     <!-- Page Content  -->
     <div id="content">
@@ -57,17 +36,22 @@ import("apps/view/inc/navbar.php");
             <div class="row">
                 <div class="col-12">
                     <h4>My Restaurant</h4>
+                    <?php 
+                    // $metre = calculateDistance(26.180006936125913, 86.0077261820532, 26.16225054639407, 85.89607136588411);
+                    // echo $metre;
+                    ?>
+
                 </div>
             </div>
             <div class="row mt-4"></div>
 
-            
+
         </div>
     </div>
 </div>
 
 
-    </div>
+</div>
 </div>
 <!-- Model Ends -->
 

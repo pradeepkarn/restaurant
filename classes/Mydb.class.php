@@ -1,4 +1,4 @@
-<?php if(defined("direct_access") != 1){echo "Silenece is awesome"; return;} 
+<?php 
 class Mydb extends Dbobjects
 {
     public function __construct($table)
@@ -19,7 +19,7 @@ class Mydb extends Dbobjects
         return $this->filter_distinct($col, $ord,$limit);
     }
 
-    public function filterDistinctWhr($col="",$assoc_arr, $ord='',$limit = 9999999)
+    public function filterDistinctWhr($col="",$assoc_arr=array(), $ord='',$limit = 9999999)
     {
         return $this->filter_distinct_whr($col,$assoc_arr, $ord,$limit);
     }

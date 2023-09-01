@@ -1,8 +1,5 @@
-<?php if(defined("direct_access") != 1){echo "Silenece is awesome"; return;} ?>
+
 <?php
-#.....................................
-#DO NOT EDIT BELOW
-#.....................................
 class Dbh {
 #Database Connection Area#####################################################################
     private $host = PK_DB_HOST;

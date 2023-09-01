@@ -29,7 +29,7 @@ import("apps/view/inc/navbar.php");
 
 <div class="wrapper">
     <!-- Sidebar  -->
-    <?php import("apps/view/pages/restaurant/inc.php"); ?>
+    <?php import("apps/view/pages/drivers/inc.php"); ?>
 
     <!-- Page Content  -->
     <div id="content">
@@ -55,6 +55,9 @@ import("apps/view/inc/navbar.php");
                     $me = (object)$db->pk($_SESSION['user_id']);
                     ?>
 
+
+                    <link href="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css" rel="stylesheet" />
+                    <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.css" type="text/css" />
                     <style>
                         /* Add some basic CSS styles */
                         body {
@@ -68,9 +71,10 @@ import("apps/view/inc/navbar.php");
 
                     <form id="location-form">
                     </form>
-                    <div id="map"></div>
 
-                 
+                    <!-- Display the selected location's coordinates -->
+                    <div id="coordinates"></div>
+                    <div id="map"></div>
 
 
                     <form id="update-profile-form" action="/<?php echo home . "/update-my-profile"; ?>">
@@ -120,6 +124,7 @@ import("apps/view/inc/navbar.php");
 <?php
 import("apps/view/inc/api.mapbox.js.php");
 ?>
+
 
 <script>
     $(document).ready(function() {

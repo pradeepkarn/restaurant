@@ -1,8 +1,4 @@
-<?php if(defined("direct_access") != 1){echo "Silenece is awesome"; return;} ?>
 <?php
-/**
- * 
- */
 class Dbobjects extends Dbh
 {
     public $tableName; // set tablename
@@ -119,7 +115,7 @@ class Dbobjects extends Dbh
         $assoc_arr = null;
         return $this->show($this->sql);
     }
-    public function filter_distinct_whr($col="",$assoc_arr, $ord='',$limit = 99999999,$change_order_by_col="")
+    public function filter_distinct_whr($col="",$assoc_arr=array(), $ord='',$limit = 99999999,$change_order_by_col="")
     {
         if ($change_order_by_col!="") {
             $id = $change_order_by_col;
