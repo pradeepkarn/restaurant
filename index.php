@@ -389,6 +389,16 @@ switch ($path) {
       echo go_to('restaurant-login');
       return;
     }
+    if ($url[0] == "my-accepted-orders") {
+      if (authenticate()) {
+        if (USER['is_restaurant'] == 1) {
+          import("apps/view/pages/restaurant/accepted-order-list.php");
+          return;
+        }
+      }
+      echo go_to('restaurant-login');
+      return;
+    }
     if ($url[0] == "my-listed-foods") {
       if (authenticate()) {
         if (USER['is_restaurant'] == 1) {
