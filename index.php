@@ -501,10 +501,87 @@ switch ($path) {
       echo go_to('restaurant-login');
       return;
     }
-    if ($url[0] == "all-restaurant-orders") {
+    if ($url[0] == "all-new-orders") {
       if (authenticate()) {
         if (USER['is_driver'] == 1) {
-          import("apps/view/pages/drivers/order-list.php");
+          import("apps/view/pages/drivers/new-order-list.php");
+          return;
+        }
+      }
+      echo go_to('restaurant-login');
+      return;
+    }
+    if ($url[0] == "all-accepted-orders") {
+      if (authenticate()) {
+        if (USER['is_driver'] == 1) {
+          import("apps/view/pages/drivers/accepted-order-list.php");
+          return;
+        }
+      }
+      echo go_to('restaurant-login');
+      return;
+    }
+    if ($url[0] == "all-delivered-orders") {
+      if (authenticate()) {
+        if (USER['is_driver'] == 1) {
+          import("apps/view/pages/drivers/delivered-order-list.php");
+          return;
+        }
+      }
+      echo go_to('restaurant-login');
+      return;
+    }
+    if ($url[0] == "all-cancelled-orders") {
+      if (authenticate()) {
+        if (USER['is_driver'] == 1) {
+          import("apps/view/pages/drivers/cancelled-order-list.php");
+          return;
+        }
+      }
+      echo go_to('restaurant-login');
+      return;
+    }
+    if ($url[0] == "accept-order-by-driver") {
+      if (authenticate()) {
+        if (USER['is_driver'] == 1) {
+          $post = obj($_POST);
+          $db = new Dbobjects;
+          $reply = $db->dbpdo()->exec("update payment set deliver_by = '$post->deliver_by' where id = '$post->payment_id' and (deliver_by > 0 OR deliver_by='');");
+          if ($reply) {
+            echo js_alert("Order accepted");
+            echo RELOAD;
+          }
+          return;
+        }
+      }
+      echo go_to('restaurant-login');
+      return;
+    }
+    if ($url[0] == "change-accepted-order-status-by-driver") {
+      if (authenticate()) {
+        if (USER['is_driver'] == 1) {
+          $post = obj($_POST);
+          $db = new Dbobjects;
+          switch ($post->action) {
+            case 'cancelled':
+              $reply = $db->dbpdo()->exec("update payment set deliver_by = '$post->deliver_by', is_cancelled=1 where id = '$post->payment_id' and (deliver_by > 0 OR deliver_by='');");
+              break;
+            case 'delivered':
+              $reply = $db->dbpdo()->exec("update payment set deliver_by = '$post->deliver_by', is_delivered=1 where id = '$post->payment_id' and (deliver_by > 0 OR deliver_by='');");
+              break;
+            case 'release':
+              $reply = $db->dbpdo()->exec("update payment set deliver_by = '0', is_cancelled=0 where id = '$post->payment_id' and (deliver_by > 0 OR deliver_by='');");
+              break;
+            default:
+            $reply = false;
+              break;
+          }
+          if ($reply) {
+            echo js_alert("Order accepted");
+            echo RELOAD;
+          }else{
+            echo js_alert("No change");
+          }
           return;
         }
       }
@@ -969,14 +1046,14 @@ switch ($path) {
         $arr['landmark'] = isset($addrs->address) ? $addrs->address : null;
         $arr['lat'] = isset($addrs->lat) ? $addrs->lat : null;
         $arr['lon'] = isset($addrs->lon) ? $addrs->lon : null;
-        $distance = calculateDistance($restcord->latitude,$restcord->longitude,$arr['lat'],$arr['lon']);
+        $distance = calculateDistance($restcord->latitude, $restcord->longitude, $arr['lat'], $arr['lon']);
         if (!is_numeric($distance)) {
           echo js_alert('Invalid location');
           return;
         }
         $arr['distance'] = $distance;
         $arr['payment_method'] = sanitize_remove_tags($_POST['payment_mode']);
-      
+
 
         $arr['unique_id'] = uniqid();
 
