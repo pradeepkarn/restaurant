@@ -399,6 +399,26 @@ switch ($path) {
       echo go_to('restaurant-login');
       return;
     }
+    if ($url[0] == "my-cancelled-orders") {
+      if (authenticate()) {
+        if (USER['is_restaurant'] == 1) {
+          import("apps/view/pages/restaurant/cancelled-order-list.php");
+          return;
+        }
+      }
+      echo go_to('restaurant-login');
+      return;
+    }
+    if ($url[0] == "my-delivered-orders") {
+      if (authenticate()) {
+        if (USER['is_restaurant'] == 1) {
+          import("apps/view/pages/restaurant/delivered-order-list.php");
+          return;
+        }
+      }
+      echo go_to('restaurant-login');
+      return;
+    }
     if ($url[0] == "my-listed-foods") {
       if (authenticate()) {
         if (USER['is_restaurant'] == 1) {
@@ -501,6 +521,7 @@ switch ($path) {
       echo go_to('restaurant-login');
       return;
     }
+    ############################################## driver
     if ($url[0] == "driver-settings") {
       if (authenticate()) {
         if (USER['is_driver'] == 1) {
@@ -567,14 +588,21 @@ switch ($path) {
       echo go_to('restaurant-login');
       return;
     }
+    ######################################### driver or restaurant
     if ($url[0] == "change-accepted-order-status-by-driver") {
       if (authenticate()) {
-        if (USER['is_driver'] == 1) {
+        if (USER['is_driver'] == 1 || USER['is_restaurant']==1) {
           $post = obj($_POST);
           $db = new Dbobjects;
           switch ($post->action) {
             case 'cancelled':
-              $reply = $db->dbpdo()->exec("update payment set deliver_by = '$post->deliver_by', is_cancelled=1 where id = '$post->payment_id' and (deliver_by > 0 OR deliver_by='');");
+              if (USER['is_restaurant']==1) {
+                $reply = $db->dbpdo()->exec("update payment set deliver_by = '0', is_cancelled=1 where id = '$post->payment_id';");
+              }
+              else{
+                // $reply = $db->dbpdo()->exec("update payment set deliver_by = '$post->deliver_by', is_cancelled=1 where id = '$post->payment_id' and (deliver_by > 0 OR deliver_by='');");
+                $reply = false;
+              }
               break;
             case 'delivered':
               $reply = $db->dbpdo()->exec("update payment set deliver_by = '$post->deliver_by', is_delivered=1 where id = '$post->payment_id' and (deliver_by > 0 OR deliver_by='');");
@@ -587,7 +615,7 @@ switch ($path) {
               break;
           }
           if ($reply) {
-            echo js_alert("Order accepted");
+            echo js_alert("Order status changed");
             echo RELOAD;
           }else{
             echo js_alert("No change");

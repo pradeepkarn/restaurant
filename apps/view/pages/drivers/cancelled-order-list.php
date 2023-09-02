@@ -21,7 +21,7 @@ import("apps/view/inc/navbar.php");
 <div class="container-fluid checkout_banner mt-5">
     <div class="row">
         <div class="col-12 text-center pt-5 pb-5 check_new">
-            <h2>Restaurant Dashboard</h2>
+            <h2>Driver Dashboard</h2>
             <p>Home / <span>Orders</span></p>
         </div>
     </div>

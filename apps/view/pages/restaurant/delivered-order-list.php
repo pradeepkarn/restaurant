@@ -68,7 +68,7 @@ import("apps/view/inc/navbar.php");
 
                         $db = new Dbobjects;
                         $db->tableName = 'payment';
-                        $payment_list = $db->show("select * from payment where rest_id = $rest->id and is_cancelled=0 and (deliver_by!='' OR deliver_by!='0');");
+                        $payment_list = $db->show("select * from payment where rest_id = $rest->id and is_delivered=1 and (deliver_by!='' OR deliver_by!='0');");
 
                         foreach ($payment_list as $pl) {
                             $pl = (object) $pl;
@@ -186,6 +186,13 @@ import("apps/view/inc/navbar.php");
                                         <?php }
                                         ?>
                                     </table>
+
+
+
+
+
+
+
                                     <!-- Modal accept order by driver-->
                                     <div class="modal fade" id="acceptOrderModal<?php echo $pl->id; ?>" tabindex="-1" aria-labelledby="acceptOrderModalLabel<?php echo $pl->id; ?>" aria-hidden="true">
                                         <div class="modal-dialog">
@@ -203,7 +210,7 @@ import("apps/view/inc/navbar.php");
                                                             <span><?php echo $rest->rest_location; ?></span>
                                                         </div>
                                                     </div>
-                                                    <h3 class="my-2">Driver from restaurant : <?php echo $driver_from_rest_km; ?>KM</h3>
+                                                    <h3 class="my-2">Me from restaurant : <?php echo $driver_from_rest_km; ?>KM</h3>
                                                     <h3 class="my-2">Customer from restaurant : <?php echo $customer_from_rest_km; ?>KM</h3>
                                                     <h3 class="my-2">Driver from customer : <?php echo $driver_from_customer_km; ?>KM</h3>
                                                     <input type="hidden" class='<?php echo "accept-order-data{$pl->id}"; ?>' name="payment_id" value="<?php echo $pl->id; ?>">

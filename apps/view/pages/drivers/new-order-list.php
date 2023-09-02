@@ -21,7 +21,7 @@ import("apps/view/inc/navbar.php");
 <div class="container-fluid checkout_banner mt-5">
     <div class="row">
         <div class="col-12 text-center pt-5 pb-5 check_new">
-            <h2>Restaurant Dashboard</h2>
+            <h2>Driver Dashboard</h2>
             <p>Home / <span>Orders</span></p>
         </div>
     </div>
@@ -55,7 +55,7 @@ import("apps/view/inc/navbar.php");
                     $me = obj(USER);
                     $db = new Dbobjects;
                     $db->tableName = 'payment';
-                    $payment_list = $db->show("select * from payment where is_delivered=0 and deliver_by=0 OR deliver_by='';");
+                    $payment_list = $db->show("select * from payment where is_delivered=0 and is_cancelled=0 and (deliver_by=0 OR deliver_by='');");
 
                     foreach ($payment_list as $pl) {
                         $pl = (object) $pl;

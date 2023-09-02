@@ -21,7 +21,7 @@ import("apps/view/inc/navbar.php");
 <div class="container-fluid checkout_banner mt-5">
     <div class="row">
         <div class="col-12 text-center pt-5 pb-5 check_new">
-            <h2>Restaurant Dashboard</h2>
+            <h2>Driver Dashboard</h2>
             <p>Home / <span>Orders</span></p>
         </div>
     </div>
@@ -110,7 +110,7 @@ import("apps/view/inc/navbar.php");
                                 <tr>
                                     <td>
 
-                                        <button type="button" class="btn btn-warning my-2" data-bs-toggle="modal" data-bs-target="#acceptOrderModal<?php echo $pl->id; ?>">Cancel or Release Or Deliver</button>
+                                        <button type="button" class="btn btn-warning my-2" data-bs-toggle="modal" data-bs-target="#acceptOrderModal<?php echo $pl->id; ?>">Release Or Deliver</button>
                                         <button type="button" class="btn btn-outline-danger my-2" data-bs-toggle="modal" data-bs-target="#orderDetailsModal<?php echo $pl->id; ?>">View Receipt</button>
 
                                     </td>
@@ -204,7 +204,6 @@ import("apps/view/inc/navbar.php");
                                                 <input type="hidden" class='<?php echo "accept-order-data{$pl->id}"; ?>' name="deliver_by" value="<?php echo $me->id; ?>">
                                                 <select name="action" class="<?php echo "accept-order-data{$pl->id}"; ?> my-3 form-select">
                                                     <option value="delivered">Delivered</option>
-                                                    <option value="cancelled">Cancelled</option>
                                                     <option value="release">Release</option>
                                                 </select>
                                                 <button id="accept-this-order<?php echo $pl->id; ?>" class="btn btn-primary" type="button">Confirm</button>

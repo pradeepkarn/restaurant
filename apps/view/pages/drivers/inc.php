@@ -13,9 +13,9 @@
         <li>
             <a href="/<?php echo home."/all-delivered-orders"; ?>">Delivered Orders</a>
         </li>
-        <li>
-            <a href="/<?php echo home."/all-cancelled-orders"; ?>">Cancelled Orders</a>
-        </li>
+        <!-- <li>
+            <a href="/<?php // echo home."/all-cancelled-orders"; ?>">Cancelled Orders</a>
+        </li> -->
         <li>
             <a href="/<?php echo home."/driver-settings"; ?>">Settings</a>
         </li>

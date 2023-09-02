@@ -47,7 +47,7 @@ import("apps/view/inc/navbar.php");
         <div class="container">
             <div class="row">
                 <div class="col-12">
-                    <h4>Assigned orders</h4>
+                    <h4>Cancelled orders</h4>
 
 
 
@@ -68,17 +68,16 @@ import("apps/view/inc/navbar.php");
 
                         $db = new Dbobjects;
                         $db->tableName = 'payment';
-                        $payment_list = $db->show("select * from payment where rest_id = $rest->id and is_cancelled=0 and (deliver_by!='' OR deliver_by!='0');");
+                        $payment_list = $db->show("select * from payment where rest_id = $rest->id and is_cancelled=1;");
 
                         foreach ($payment_list as $pl) {
                             $pl = (object) $pl;
                             $driver = (object)$db->showOne("select * from pk_user where id = $pl->deliver_by");
-                            $driver_from_rest = calculateDistance($rest->latitude, $rest->longitude, $driver->lat, $driver->lon);
-                            $driver_from_rest_km = $driver_from_rest > 0 ? round(($driver_from_rest / 1000), 2) : null;
+                            // $driver_from_rest = calculateDistance($rest->latitude, $rest->longitude, $driver->lat, $driver->lon);
+                            // $driver_from_rest_km = $driver_from_rest > 0 ? round(($driver_from_rest / 1000), 2) : null;
 
                             $customer_from_rest_km = $pl->distance > 0 ? round(($pl->distance / 1000), 2) : 0;
-                            $driver_from_customer_km = $driver_from_rest_km + $customer_from_rest_km;
-
+                            
                             $buyer = (object)$db->showOne("select * from pk_user where id = $pl->user_id");
                             $dtme = new DateTime($pl->created_at);
                             $ordered_at = $dtme->format('F j, Y \a\t h:i A');
@@ -89,7 +88,7 @@ import("apps/view/inc/navbar.php");
                                     <tr>
                                         <th colspan="8">
                                             Restaurant Name: <?php echo $rest->rest_name; ?> [<?php echo $rest->id; ?>] <br>
-                                            <div class="bg-warning">Delivery person distance from this restaurant : <?php echo $driver_from_rest_km; ?> KM</div>
+                                          
                                         </th>
                                     </tr>
                                     <tr>
@@ -186,6 +185,13 @@ import("apps/view/inc/navbar.php");
                                         <?php }
                                         ?>
                                     </table>
+
+
+
+
+
+
+
                                     <!-- Modal accept order by driver-->
                                     <div class="modal fade" id="acceptOrderModal<?php echo $pl->id; ?>" tabindex="-1" aria-labelledby="acceptOrderModalLabel<?php echo $pl->id; ?>" aria-hidden="true">
                                         <div class="modal-dialog">
@@ -203,15 +209,13 @@ import("apps/view/inc/navbar.php");
                                                             <span><?php echo $rest->rest_location; ?></span>
                                                         </div>
                                                     </div>
-                                                    <h3 class="my-2">Driver from restaurant : <?php echo $driver_from_rest_km; ?>KM</h3>
+                                                  
                                                     <h3 class="my-2">Customer from restaurant : <?php echo $customer_from_rest_km; ?>KM</h3>
-                                                    <h3 class="my-2">Driver from customer : <?php echo $driver_from_customer_km; ?>KM</h3>
+                                                    
                                                     <input type="hidden" class='<?php echo "accept-order-data{$pl->id}"; ?>' name="payment_id" value="<?php echo $pl->id; ?>">
                                                     <input type="hidden" class='<?php echo "accept-order-data{$pl->id}"; ?>' name="deliver_by" value="<?php echo $driver->id; ?>">
                                                     <select name="action" class="<?php echo "accept-order-data{$pl->id}"; ?> my-3 form-select">
-                                                        <option value="delivered">Delivered</option>
-                                                        <option value="cancelled">Cancelled</option>
-                                                        <option value="release">Release delivery person</option>
+                                                        <option value="release">Active</option>
                                                     </select>
                                                     <button id="accept-this-order<?php echo $pl->id; ?>" class="btn btn-primary" type="button">Confirm</button>
                                                     <?php pkAjax("#accept-this-order{$pl->id}", "/change-accepted-order-status-by-driver", ".accept-order-data{$pl->id}", "#res{$pl->id}"); ?>

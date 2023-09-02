@@ -70,10 +70,15 @@ import("apps/view/inc/navbar.php");
 
 
 
+
                 ?>
                 <?php
                 foreach ($order_details as $od) {
                     $od = (object) $od;
+                    $is_assigned = false;
+                    if ($od->deliver_by != '' && $od->deliver_by > 0) {
+                        $is_assigned = true;
+                    }
                     // Convert the database datetime to the desired format
                     $paymentDatetime = new DateTime($od->created_at); // Assuming 'payment_datetime' is the column name in the database
                     $formattedDatetime = $paymentDatetime->format('F j, Y \a\t h:i A');
@@ -82,6 +87,8 @@ import("apps/view/inc/navbar.php");
                 ?>
                     <div class="col-4 mb-4">
                         <div class="card">
+                            <b> Status: <?php echo $is_assigned ? 'Order assigned' : null; ?> <?php echo $od->is_delivered ? 'Delivered' : null; ?> <?php echo $od->is_cancelled ? 'Cancelled' : null; ?> </b>
+
                             <div class="card-header ord_head">
                                 <div class="ord1">
                                     <img src="/<?php echo MEDIA_URL ?>/images/pages/<?php echo $restaurant_prod['banner']; ?>" height="45px" width="48px" alt="" srcset="" style="object-fit: cover;">

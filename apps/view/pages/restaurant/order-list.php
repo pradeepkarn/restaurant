@@ -68,6 +68,7 @@ import("apps/view/inc/navbar.php");
                         foreach ($payment_list as $pl) {
                             $pl = (object) $pl;
                             $buyer = (object)$db->showOne("select * from pk_user where id = $pl->user_id");
+                            $driver = (object)$db->showOne("select * from pk_user where id = $pl->deliver_by");
                             $dtme = new DateTime($pl->created_at);
                             $ordered_at = $dtme->format('F j, Y \a\t h:i A');
                         ?>
@@ -133,8 +134,10 @@ import("apps/view/inc/navbar.php");
                                     </tr>
                                     <tr>
                                         <td class="text-center" colspan="8">
+                                        Restaurant Name: <?php echo $rest->rest_name; ?> [<?php echo $rest->id; ?>] <br>
+                                            <b>Delivery person mobile:</b> <?php echo isset($driver->mobile) ? $driver->mobile : "Not assigned"; ?> <br>
                                             <b>Restaurant Address:</b> <?php echo $rest->rest_location; ?> <br>
-                                            <i class="fas fa-arrow-down"></i> <b><?php echo $pl->distance>0?round(($pl->distance/1000),2)."KM":null; ?></b> <br>
+                                            <i class="fas fa-arrow-down"></i> <b><?php echo $pl->distance > 0 ? round(($pl->distance / 1000), 2) . "KM" : null; ?></b> <br>
                                             <b>User Address:</b> <?php echo $pl->landmark; ?> <br>
                                         </td>
                                     </tr>
@@ -167,13 +170,6 @@ import("apps/view/inc/navbar.php");
                                         <?php }
                                         ?>
                                     </table>
-
-
-
-
-
-
-
                                     <!-- Modal -->
                                     <div class="modal fade" id="orderDetailsModal<?php echo $pl->id; ?>" tabindex="-1" aria-labelledby="orderDetailsModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
