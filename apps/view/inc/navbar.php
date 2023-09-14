@@ -13,13 +13,19 @@
                 <li class="nav-item">
                     <?php
                     $account_link = "user-dashboard";
-                    if (isset(USER['is_restaurant']) && USER['is_restaurant'] == 1) {
-                        $account_link = "dirver-dashboard";
+                    if (isset(USER['user_group']) && USER['user_group'] == 'restaurant') {
+                        $account_link = "restaurant-dashboard";
                     }
-                    if (isset(USER['is_driver']) && USER['is_driver'] == 1) {
+                    elseif (isset(USER['user_group']) && USER['user_group'] == 'driver') {
                         $account_link = "driver-dashboard";
-                    } else {
+                    } 
+                    elseif (isset(USER['user_group']) && USER['user_group'] == 'user') {
                         $account_link = "user-dashboard";
+                    }
+                    elseif (isset(USER['user_group']) && USER['user_group'] == 'admin') {
+                        $account_link = "sitepanel";
+                    }else{
+                        $account_link = null;
                     }
                     ?>
                     <a class="nav-link active" aria-current="page" href="/<?php echo home . "/$account_link"; ?>">My Account</a>

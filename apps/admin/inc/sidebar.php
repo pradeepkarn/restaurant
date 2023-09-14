@@ -22,15 +22,48 @@
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
             </div>
-            <span class="nav-link-text ms-1">Restaurant Table</span>
+            <span class="nav-link-text ms-1">Restaurant</span>
           </a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link " href="/<?php echo home ?>/new-orders">
+            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
+            </div>
+            <span class="nav-link-text ms-1">New Orders</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link " href="/<?php echo home ?>/assigned-orders">
+            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
+            </div>
+            <span class="nav-link-text ms-1">Assigned Orders</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link " href="/<?php echo home ?>/delivered-orders">
+            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
+            </div>
+            <span class="nav-link-text ms-1">Delivered Orders</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link " href="/<?php echo home ?>/cancelled-orders">
+            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
+            </div>
+            <span class="nav-link-text ms-1">Cancelled Orders</span>
+          </a>
+        </li>
+        
         <li class="nav-item">
           <a class="nav-link " href="/<?php echo home ?>/food-category-table">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
             </div>
-            <span class="nav-link-text ms-1">Category Table</span>
+            <span class="nav-link-text ms-1">Category</span>
           </a>
         </li>
         <li class="nav-item">

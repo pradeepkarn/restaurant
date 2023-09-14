@@ -1599,3 +1599,28 @@ function calculateDistance($startLat, $startLon, $endLat, $endLon)
     return null;
   }
 }
+function food_order_details(object $pl, object $db, object $rest)
+{
+  $customer_from_rest_km = $pl->distance > 0 ? round(($pl->distance / 1000), 2) : 0;
+  if (is_int($pl->deliver_by) && $pl->deliver_by > 0) {
+    $driver = (object)$db->showOne("select id,username,email,first_name,last_name,address,lat,lon,mobile from pk_user where id = $pl->deliver_by");
+    $driver_from_rest = calculateDistance($rest->latitude, $rest->longitude, $driver->lat, $driver->lon);
+    $driver_from_rest_km = $driver_from_rest > 0 ? round(($driver_from_rest / 1000), 2) : null;
+    $driver_from_customer_km = $driver_from_rest_km + $customer_from_rest_km;
+  }else{
+    $driver = null;
+    $driver_from_rest_km = null;
+    $driver_from_customer_km = null;
+  }
+  $buyer = (object)$db->showOne("select id,username,email,first_name,last_name,address,lat,lon,mobile from pk_user where id = $pl->user_id");
+  $dtme = new DateTime($pl->created_at);
+  $ordered_at = $dtme->format('F j, Y \a\t h:i A');
+  return obj([
+    'driver_from_rest_km' => $driver_from_rest_km,
+    'customer_from_rest_km' => $customer_from_rest_km,
+    'driver_from_customer_km' => $driver_from_customer_km,
+    'buyer' => $buyer,
+    'driver' => $driver,
+    'ordered_at' => $ordered_at,
+  ]);
+}

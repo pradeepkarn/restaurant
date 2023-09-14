@@ -20,26 +20,29 @@ class Rest_ctrl
             $pdo->beginTransaction();
             $db->tableName = 'pk_user';
             if (count($db->filter(['email' => $req->owner_email])) > 0) {
-                $olduser = obj($db->filter(['email' => $req->owner_email])[0]);
-                $id = $olduser->id;
-                if ($olduser->is_restaurant != 1) {
-                    if (md5($req->password) != $olduser->password) {
-                        $_SESSION['msg'][] = "You have already registered from this email so You need to provide your old password in password field because you are going to be a user as well.";
-                        echo js_alert(msg_ssn(return: true));
-                        return false;
-                    }
-                    $db->insertData['is_restaurant'] = 1;
-                    $db->pk($id);
-                    $db->update();
-                    $pdo->commit();
-                    $_SESSION['msg'][] = "Your account is upgraded as a user also";
-                    echo js_alert(msg_ssn(return: true));
-                    return true;
-                } else {
-                    $_SESSION['msg'][] = "You have already registered as a user";
-                    echo js_alert(msg_ssn(return: true));
-                    return false;
-                }
+                $_SESSION['msg'][] = "This email is already in use please use another email";
+                echo js_alert(msg_ssn(return: true));
+                return false;
+                // $olduser = obj($db->filter(['email' => $req->owner_email])[0]);
+                // $id = $olduser->id;
+                // if ($olduser->is_restaurant != 1) {
+                //     if (md5($req->password) != $olduser->password) {
+                //         $_SESSION['msg'][] = "You have already registered from this email so You need to provide your old password in password field because you are going to be a user as well.";
+                //         echo js_alert(msg_ssn(return: true));
+                //         return false;
+                //     }
+                //     $db->insertData['is_restaurant'] = 1;
+                //     $db->pk($id);
+                //     $db->update();
+                //     $pdo->commit();
+                //     $_SESSION['msg'][] = "Your account is upgraded as a user also";
+                //     echo js_alert(msg_ssn(return: true));
+                //     return true;
+                // } else {
+                //     $_SESSION['msg'][] = "You have already registered as a user";
+                //     echo js_alert(msg_ssn(return: true));
+                //     return false;
+                // }
             }
             $username = generate_username_by_email_trans($req->owner_email, $try = 100, $db = $db);
             if ($username == false) {
@@ -54,7 +57,10 @@ class Rest_ctrl
             }
             $paramObj->email = $req->owner_email;
             $paramObj->username = $username;
+            $paramObj->is_user = 0;
+            $paramObj->is_driver = 0;
             $paramObj->is_restaurant = 1;
+            $paramObj->user_group = "restaurant";
             $paramObj->password = md5($req->password);
             $db->tableName = 'pk_user';
             $db->insertData = arr($paramObj);

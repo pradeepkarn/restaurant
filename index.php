@@ -449,7 +449,7 @@ switch ($path) {
       return;
     }
 
-    // Admin Dashboard
+    // Admin Dashboard ######################################################## Admin ##################
     if ($url[0] == "admin-login") {
       import("apps/admin/pages/admin-login.php");
       return;
@@ -475,6 +475,7 @@ switch ($path) {
         return;
       }
       echo go_to("");
+      return;
     }
     if ($url[0] == "restaurant-info") {
       if (is_superuser()) {
@@ -482,6 +483,7 @@ switch ($path) {
         return;
       }
       echo go_to("");
+      return;
     }
     if ($url[0] == "restaurant-list") {
       if (is_superuser()) {
@@ -489,6 +491,43 @@ switch ($path) {
         return;
       }
       echo go_to("");
+      return;
+    }
+    // new orders
+    if ($url[0] == "new-orders") {
+      if (is_superuser()) {
+        import("apps/admin/pages/meal_orders/new.php");
+        return;
+      }
+      echo go_to("");
+      return;
+    }
+    // assigned orders
+    if ($url[0] == "assigned-orders") {
+      if (is_superuser()) {
+        import("apps/admin/pages/meal_orders/assigned.php");
+        return;
+      }
+      echo go_to("");
+      return;
+    }
+    // delivered orders
+    if ($url[0] == "delivered-orders") {
+      if (is_superuser()) {
+        import("apps/admin/pages/meal_orders/delivered.php");
+        return;
+      }
+      echo go_to("");
+      return;
+    }
+    // cancelled orders
+    if ($url[0] == "cancelled-orders") {
+      if (is_superuser()) {
+        import("apps/admin/pages/meal_orders/cancelled.php");
+        return;
+      }
+      echo go_to("");
+      return;
     }
     if ($url[0] == "registered-users") {
       if (is_superuser()) {
@@ -496,6 +535,7 @@ switch ($path) {
         return;
       }
       echo go_to("");
+      return;
     }
     if ($url[0] == "registered-riders") {
       if (is_superuser()) {
@@ -503,6 +543,7 @@ switch ($path) {
         return;
       }
       echo go_to("");
+      return;
     }
     if ($url[0] == "add-food-category") {
       if (is_superuser()) {
@@ -510,7 +551,9 @@ switch ($path) {
         return;
       }
       echo go_to("");
+      return;
     }
+    ########################################################################################## Admin ends #################
     if ($url[0] == "restaurant-settings") {
       if (authenticate()) {
         if (USER['is_restaurant'] == 1) {

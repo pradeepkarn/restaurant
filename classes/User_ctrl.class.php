@@ -89,10 +89,13 @@ class User_ctrl
             $paramObj->username = $username;
             // $paramObj->national_id = $req->national_id;
             $paramObj->is_user = 1;
+            $paramObj->is_driver = 0;
+            $paramObj->is_restaurant = 0;
             $paramObj->password = md5($req->password);
             $paramObj->name = $req->first_name . " " . $req->last_name;
             $paramObj->first_name = $req->first_name;
             $paramObj->last_name = $req->last_name;
+            $paramObj->user_group = "user";
             $db->tableName = 'pk_user';
             $db->insertData = arr($paramObj);
             try {

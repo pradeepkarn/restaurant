@@ -33,53 +33,57 @@ class Driver_ctrl
             $pdo->beginTransaction();
             $db->tableName = 'pk_user';
             if (count($db->filter(['email' => $req->email])) > 0) {
-                $olduser = obj($db->filter(['email' => $req->email])[0]);
-                $id = $olduser->id;
-                if ($olduser->is_driver != 1) {
-                    if (md5($req->password) != $olduser->password) {
-                        $_SESSION['msg'][] = "You have already registered as a user from this email so You need to provide your old password in password field because you  are going to upgrade your account as a driver.";
-                        echo js_alert(msg_ssn(return: true));
-                        return false;
-                    }
-                    $db->insertData['is_driver'] = 1;
-                    ########################### uploads #################
-                    if (isset($files->profile_img)) {
-                        $imgfl = obj($files->profile_img);
-                        if ($imgfl->error == 0) {
-                            $ext = pathinfo($imgfl->name, PATHINFO_EXTENSION);
-                            $imgname = uniqid('profile_') . "_" . $id . "." . $ext;
-                            move_uploaded_file($imgfl->tmp_name, MEDIA_ROOT . "images/profiles/$imgname");
-                            $db->insertData['image'] = $imgname;
-                            if (file_exists(MEDIA_ROOT . "images/profiles/$olduser->image") && $olduser->image != '') {
-                                unlink(MEDIA_ROOT . "images/profiles/$olduser->image");
-                            }
-                        }
-                    }
+                $_SESSION['msg'][] = "This email is already in use please use another";
+                echo js_alert(msg_ssn(return: true));
+                return false;
 
-                    if (isset($files->national_id_doc)) {
-                        $imgfl = obj($files->national_id_doc);
-                        if ($imgfl->error == 0) {
-                            $ext = pathinfo($imgfl->name, PATHINFO_EXTENSION);
-                            $docs = uniqid('national_id_doc_') . "_" . $id . "." . $ext;
-                            move_uploaded_file($imgfl->tmp_name, MEDIA_ROOT . "docs/$docs");
-                            $db->insertData['national_id_doc'] = $docs;
-                            if (file_exists(MEDIA_ROOT . "docs/$olduser->national_id_doc") && $olduser->national_id_doc != '') {
-                                unlink(MEDIA_ROOT . "docs/$olduser->national_id_doc");
-                            }
-                        }
-                    }
-                    $db->pk($id);
-                    $db->update();
-                    $pdo->commit();
-                    ######################### uploads ####################
-                    $_SESSION['msg'][] = "Your account is upgraded as a driver";
-                    echo js_alert(msg_ssn(return: true));
-                    return true;
-                } else {
-                    $_SESSION['msg'][] = "You have already registered as a driver";
-                    echo js_alert(msg_ssn(return: true));
-                    return false;
-                }
+                // $olduser = obj($db->filter(['email' => $req->email])[0]);
+                // $id = $olduser->id;
+                // if ($olduser->is_driver != 1) {
+                //     if (md5($req->password) != $olduser->password) {
+                //         $_SESSION['msg'][] = "You have already registered as a user from this email so You need to provide your old password in password field because you  are going to upgrade your account as a driver.";
+                //         echo js_alert(msg_ssn(return: true));
+                //         return false;
+                //     }
+                //     $db->insertData['is_driver'] = 1;
+                //     ########################### uploads #################
+                //     if (isset($files->profile_img)) {
+                //         $imgfl = obj($files->profile_img);
+                //         if ($imgfl->error == 0) {
+                //             $ext = pathinfo($imgfl->name, PATHINFO_EXTENSION);
+                //             $imgname = uniqid('profile_') . "_" . $id . "." . $ext;
+                //             move_uploaded_file($imgfl->tmp_name, MEDIA_ROOT . "images/profiles/$imgname");
+                //             $db->insertData['image'] = $imgname;
+                //             if (file_exists(MEDIA_ROOT . "images/profiles/$olduser->image") && $olduser->image != '') {
+                //                 unlink(MEDIA_ROOT . "images/profiles/$olduser->image");
+                //             }
+                //         }
+                //     }
+
+                //     if (isset($files->national_id_doc)) {
+                //         $imgfl = obj($files->national_id_doc);
+                //         if ($imgfl->error == 0) {
+                //             $ext = pathinfo($imgfl->name, PATHINFO_EXTENSION);
+                //             $docs = uniqid('national_id_doc_') . "_" . $id . "." . $ext;
+                //             move_uploaded_file($imgfl->tmp_name, MEDIA_ROOT . "docs/$docs");
+                //             $db->insertData['national_id_doc'] = $docs;
+                //             if (file_exists(MEDIA_ROOT . "docs/$olduser->national_id_doc") && $olduser->national_id_doc != '') {
+                //                 unlink(MEDIA_ROOT . "docs/$olduser->national_id_doc");
+                //             }
+                //         }
+                //     }
+                //     $db->pk($id);
+                //     $db->update();
+                //     $pdo->commit();
+                //     ######################### uploads ####################
+                //     $_SESSION['msg'][] = "Your account is upgraded as a driver";
+                //     echo js_alert(msg_ssn(return: true));
+                //     return true;
+                // } else {
+                //     $_SESSION['msg'][] = "You have already registered as a driver";
+                //     echo js_alert(msg_ssn(return: true));
+                //     return false;
+                // }
             }
             $username = generate_username_by_email_trans($req->email, $try = 100, $db = $db);
             if ($username == false) {
@@ -101,11 +105,14 @@ class Driver_ctrl
             $paramObj->email = $req->email;
             $paramObj->username = $username;
             $paramObj->national_id = $req->national_id;
+            $paramObj->is_user = 0;
             $paramObj->is_driver = 1;
+            $paramObj->is_restaurant = 0;
             $paramObj->password = md5($req->password);
             $paramObj->name = $req->first_name . " " . $req->last_name;
             $paramObj->first_name = $req->first_name;
             $paramObj->last_name = $req->last_name;
+            $paramObj->user_group = "driver";
             $db->tableName = 'pk_user';
             $db->insertData = arr($paramObj);
             try {
