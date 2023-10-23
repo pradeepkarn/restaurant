@@ -1067,6 +1067,10 @@ switch ($path) {
     }
 
     ################## Order Placement ################################
+    if ($url[0]=='api') {
+      import('apps/api/index.php');
+      return;
+    }
     if ($url[0] == "place-order-ajax") {
       if (authenticate() == false) {
         echo js_alert('Please login first');

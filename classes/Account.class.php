@@ -1,4 +1,8 @@
+<?php if(defined("direct_access") != 1){echo "Silenece is awesome"; return;} ?>
 <?php
+/**
+ * 
+ */
 class Account
 {
     public function login($email="",$pass="")

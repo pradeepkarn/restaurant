@@ -48,9 +48,6 @@ import("apps/view/inc/navbar.php");
             <div class="row">
                 <div class="col-12">
                     <h4>My Orders</h4>
-
-
-
                     <?php
                     $me = obj(USER);
                     $db = new Dbobjects;

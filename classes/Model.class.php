@@ -6,10 +6,10 @@ class Model
     private $dbTableObj;
     public $table;
     public $json_obj;
-    public function __construct($table)
+    public function __construct($table,$db=null)
     {
         $this->table = $table;
-        $this->dbTableObj = new Dbobjects;
+        $this->dbTableObj = $db?$db:(new Dbobjects);
         $this->dbTableObj->tableName = $this->table;
         $this->json_obj = false;
     }
@@ -143,7 +143,7 @@ class Model
             return array();
         }
     }
-    public function show_unique_whr($col="",$whr_assoc_arr=array(), $ord='DESC',$limit = 9999999)
+    public function show_unique_whr($col="",$whr_assoc_arr=[], $ord='DESC',$limit = 9999999)
     {
         $data = $this->dbTableObj->filter_distinct_whr($col,$whr_assoc_arr,$ord,$limit);
         if (count($data)>0) {
@@ -153,7 +153,7 @@ class Model
             return array();
         }
     }
-    public function search($assoc_arr, $ord='DESC',$limit =10,$change_order_by_col="",$whr_arr=array())
+    public function search($assoc_arr, $ord='DESC',$limit =10,$change_order_by_col="",$whr_arr=false)
     {
         $data = $this->dbTableObj->search($assoc_arr,$ord,$limit,$change_order_by_col,$whr_arr);
         if (count($data)>0) {

@@ -4,7 +4,7 @@ import("apps/view/inc/header.php");
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-4 text-center">
+        <div class="col-md-4 text-center">
             <div class="rg_box">
                 <a href="/<?php echo home; ?>"><img src="/<?php echo STATIC_URL ?>/view/assets/img/logo1copy.png" class="img-fluid" width="250px" height="45px" alt="" srcset=""></a>
                 <div class="bd_1 mt-3 mb-4"></div>
@@ -30,7 +30,7 @@ import("apps/view/inc/header.php");
             </div>
         </div>
         <?php pkAjax_form("#mylogin_btn","#user_login_form","#result"); ?>
-        <div class="col-8 rg_right pe-0">
+        <div class="col-md-8 rg_right pe-0">
             <img src="/<?php echo STATIC_URL ?>/view/assets/img/register-page-bg.jpg" class="img-fluid" width="100%" alt="" srcset="">
         </div>
     </div>

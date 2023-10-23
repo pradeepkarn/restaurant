@@ -1,8 +1,9 @@
-<?php 
+<?php if(defined("direct_access") != 1){echo "Silenece is awesome"; return;} 
 class Mydb extends Dbobjects
 {
     public function __construct($table)
     {
+        $this->conn = $this->conn();
         $this->tableName = $table;
     }
     public function allData($ord = '',$limit = 5)
@@ -19,7 +20,7 @@ class Mydb extends Dbobjects
         return $this->filter_distinct($col, $ord,$limit);
     }
 
-    public function filterDistinctWhr($col="",$assoc_arr=array(), $ord='',$limit = 9999999)
+    public function filterDistinctWhr($col="",$assoc_arr, $ord='',$limit = 9999999)
     {
         return $this->filter_distinct_whr($col,$assoc_arr, $ord,$limit);
     }
@@ -62,19 +63,19 @@ class Mydb extends Dbobjects
         $this->insertData = $arr;
         return $this->create();
     }
-    public function transactData($arr)
-    {
-        $this->insertData = $arr;
-        return $this->transact();
-    }
+    // public function transactData($arr)
+    // {
+    //     $this->insertData = $arr;
+    //     return $this->transact();
+    // }
     public function deleteData()
     {
         return $this->delete();
     }
-    public function transactionData($sqlarr)
-    {
-        return $this->transaction($sqlarr);
-    }
+    // public function transactionData($sqlarr)
+    // {
+    //     return $this->transaction($sqlarr);
+    // }
         
     public function update_sqlData()
     {
