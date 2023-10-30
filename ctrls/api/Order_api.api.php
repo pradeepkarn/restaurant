@@ -128,7 +128,7 @@ class Order_api extends DB_ctrl
             );
 
             $curl = curl_init();
-
+            $sitekey= sitekey;
             curl_setopt_array($curl, array(
                 CURLOPT_URL => DUNZO_SITE_API_END_POINT."/api/orders/update-single-order",
                 CURLOPT_RETURNTRANSFER => true,
@@ -140,9 +140,9 @@ class Order_api extends DB_ctrl
                 CURLOPT_CUSTOMREQUEST => 'POST',
                 CURLOPT_POSTFIELDS => json_encode($data),
                 CURLOPT_HTTPHEADER => array(
-                    'api_key: 6SedFzPnMuFxC9L3hyLbLCJnevY+k8HAv6afu8WiQa0=',
+                    "api_key: $sitekey",
                     'Content-Type: application/json',
-                    'Cookie: PHPSESSID=h2otnfm4qconqaidl8c2ro7ghl; lang=en'
+                    'Cookie: PHPSESSID=kjadhkskcliuegcjggjgjjg; lang=en'
                 ),
             ));
 
