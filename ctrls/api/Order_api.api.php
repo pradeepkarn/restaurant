@@ -162,8 +162,36 @@ class Order_api extends DB_ctrl
 
             curl_close($curl);
             // echo $response;
+            exit;
         } catch (PDOException $th) {
-            //throw $th;
+            $data = array(
+                "success" => false,
+                "data" => null,
+                "msg" => "Data found"
+            );
+            $curl = curl_init();
+            $sitekey = sitekey;
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => DUNZO_SITE_API_END_POINT . "/api/orders/update-single-order",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_POSTFIELDS => json_encode($data),
+                CURLOPT_HTTPHEADER => array(
+                    "api_key: $sitekey",
+                    'Content-Type: application/json',
+                    'Cookie: PHPSESSID=kjadhkskcliuegcjggjgjjg; lang=en'
+                ),
+            ));
+
+            $response = curl_exec($curl);
+
+            curl_close($curl);
+            exit;
         }
     }
 

@@ -1,10 +1,7 @@
 <?php
+$headers = getallheaders();
+$api_key = isset($headers['api_key']) ? $headers['api_key'] : null;
 try {
-    $orders = new Order_api;
-    $orders->get_orders();
-    $headers = getallheaders();
-    $api_key = isset($headers['api_key']) ? $headers['api_key'] : null;
-    
     if (hash_equals(sitekey, $api_key)) {
         $orders = new Order_api;
         $orders->get_orders();
