@@ -107,30 +107,42 @@ class Order_api extends DB_ctrl
     LEFT JOIN pk_user AS driver ON payment.deliver_by = driver.id WHERE payment.id = '$payment_id';
     ";
         try {
-            $req =  obj($orders->showOne($sql));
+            $ord =  $orders->showOne($sql);
             $data = array(
-                "id" => $req->id,
-                "driver_assigned" => false,
-                "orderid" => $req->unique_id,
-                "driver_id" => 0,
-                "driver" => null,
-                "buyer_id" => $req->user_id,
-                "buyer" => $req->buyer,
-                "buyer_lat" => $req->buyer_lat,
-                "buyer_lon" => $req->buyer_lon,
-                "rest_lat" => $req->rest_lat,
-                "rest_lon" => $req->rest_lon,
-                "driver_lat" => null,
-                "driver_lon" => null,
-                "user_to_rest" => $req->user_to_rest,
-                "driver_to_user" => $req->driver_to_user,
-                "distance_unit" => $req->distance_unit
+                "success" => true,
+                "data" => array(
+                    'id' => $ord['id'],
+                    'orderid' => $ord['unique_id'],
+                    'created_at' => strtotime($ord['created_at']),
+                    'amount' => $ord['amount'],
+                    'payment_method' => $ord['payment_method'],
+                    'buyer_id' => $ord['user_id'],
+                    'buyer' => $ord['buyer'],
+                    'buyer_name' => $ord['buyer_first_name'] . " " . $ord['buyer_last_name'],
+                    'isd_code' => intval($ord['isd_code']),
+                    'mobile' => intval($ord['mobile']),
+                    'locality' => $ord['locality'],
+                    'city' => $ord['city'],
+                    'state' => $ord['state'],
+                    'country' => $ord['country'],
+                    'landmark' => $ord['landmark'],
+                    'buyer_lat' => $ord['lat'],
+                    'buyer_lon' => $ord['lon'],
+                    'rest_lat' => $ord['rest_lat'],
+                    'rest_lon' => $ord['rest_lon'],
+                    'rest_id' => $ord['rest_id'],
+                    'rest_name' => $ord['rest_name'],
+                    'rest_address' => $ord['rest_address'],
+                    'user_to_rest' => round($ord['distance'] / 1000, 3),
+                    'distance_unit' => 'km'
+                ),
+                "msg" => "Data found"
             );
 
             $curl = curl_init();
-            $sitekey= sitekey;
+            $sitekey = sitekey;
             curl_setopt_array($curl, array(
-                CURLOPT_URL => DUNZO_SITE_API_END_POINT."/api/orders/update-single-order",
+                CURLOPT_URL => DUNZO_SITE_API_END_POINT . "/api/orders/update-single-order",
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING => '',
                 CURLOPT_MAXREDIRS => 10,
