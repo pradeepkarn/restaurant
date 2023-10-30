@@ -634,15 +634,14 @@ switch ($path) {
     ######################################### driver or restaurant
     if ($url[0] == "change-accepted-order-status-by-driver") {
       if (authenticate()) {
-        if (USER['is_driver'] == 1 || USER['is_restaurant']==1) {
+        if (USER['is_driver'] == 1 || USER['is_restaurant'] == 1) {
           $post = obj($_POST);
           $db = new Dbobjects;
           switch ($post->action) {
             case 'cancelled':
-              if (USER['is_restaurant']==1) {
+              if (USER['is_restaurant'] == 1) {
                 $reply = $db->dbpdo()->exec("update payment set deliver_by = '0', is_cancelled=1 where id = '$post->payment_id';");
-              }
-              else{
+              } else {
                 // $reply = $db->dbpdo()->exec("update payment set deliver_by = '$post->deliver_by', is_cancelled=1 where id = '$post->payment_id' and (deliver_by > 0 OR deliver_by='');");
                 $reply = false;
               }
@@ -654,13 +653,13 @@ switch ($path) {
               $reply = $db->dbpdo()->exec("update payment set deliver_by = '0', is_cancelled=0 where id = '$post->payment_id' and (deliver_by > 0 OR deliver_by='');");
               break;
             default:
-            $reply = false;
+              $reply = false;
               break;
           }
           if ($reply) {
             echo js_alert("Order status changed");
             echo RELOAD;
-          }else{
+          } else {
             echo js_alert("No change");
           }
           return;
@@ -1067,7 +1066,7 @@ switch ($path) {
     }
 
     ################## Order Placement ################################
-    if ($url[0]=='api') {
+    if ($url[0] == 'api') {
       import('apps/api/index.php');
       return;
     }
@@ -1167,11 +1166,14 @@ switch ($path) {
               'status' => 'paid',
               'updated_at' => date('Y-m-d H:i:s')
             );
-
             // execute payment data
             $paid = $custOrder->store($arr);
           }
-
+          try {
+            (new Order_api)->send_single_order($payment_id);
+          } catch (PDOException $th) {
+            
+          }
           echo js_alert('Order placed');
           session_destroy();
           echo go_to("");

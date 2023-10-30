@@ -844,16 +844,17 @@ function num_to_words($number)
 }
 
 
-function msg_ssn($var = 'msg', $return = false)
+function msg_ssn($var = 'msg', $return = false, $lnbrk = "\\n")
 {
   if (isset($_SESSION[$var])) {
     if ($return == true) {
       $returnmsg = null;
       foreach ($_SESSION[$var] as $msg) {
-        $returnmsg .= "{$msg}\\n";
+        $returnmsg .= "{$msg}$lnbrk";
       }
       unset($_SESSION[$var]);
-      return $returnmsg;
+      // $returnmsg = rtrim($returnmsg, ', ');
+      return rtrim($returnmsg, ', ');
     }
     foreach ($_SESSION[$var] as $msg) {
       echo "{$msg}<br>";
