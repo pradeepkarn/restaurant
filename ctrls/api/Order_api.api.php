@@ -109,7 +109,7 @@ class Order_api extends DB_ctrl
         try {
             $ord =  $orders->showOne($sql);
             $data = array(
-                "success" => true,
+                "success" => "true",
                 "data" => array(
                     'id' => $ord['id'],
                     'orderid' => $ord['unique_id'],
@@ -165,7 +165,7 @@ class Order_api extends DB_ctrl
             exit;
         } catch (PDOException $th) {
             $data = array(
-                "success" => false,
+                "success" => "false",
                 "data" => null,
                 "msg" => "Data found"
             );
