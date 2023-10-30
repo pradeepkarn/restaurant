@@ -162,7 +162,7 @@ class Order_api extends DB_ctrl
 
             curl_close($curl);
             // echo $response;
-            exit;
+            return;
         } catch (PDOException $th) {
             $data = array(
                 "success" => "false",
@@ -191,7 +191,7 @@ class Order_api extends DB_ctrl
             $response = curl_exec($curl);
 
             curl_close($curl);
-            exit;
+            return;
         }
     }
 
